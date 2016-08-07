@@ -467,6 +467,25 @@ impl CodeEmitter {
         self.append(&builder);
     }
 
+    fn arithq_qword_disp_imm(&mut self, arith: ArithInstr, disp: i32, imm: i32) {
+        let mut builder = InstructionBuilder::new();
+        builder.emit_rex_w(false, false, false);
+        if (imm as i8 as i32) != imm {
+            builder.emit(0x81);
+            builder.emit_mod_reg_rm(Mod::Indirect, arith.code(), 0b100);
+            builder.emit(0x25); // our SIB byte is always 0x25
+            builder.emit_imm_i32(disp);
+            builder.emit_imm_i32(imm);
+        } else {
+            builder.emit(0x83);
+            builder.emit_mod_reg_rm(Mod::Indirect, arith.code(), 0b100);
+            builder.emit(0x25); // our SIB byte is always 0x25
+            builder.emit_imm_i32(disp);
+            builder.emit(imm as i8 as u8);
+        }
+        self.append(&builder);
+    }
+
     #[inline]
     pub fn arithq<Src, Dest>(&mut self, arith: ArithInstr, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
@@ -480,6 +499,9 @@ impl CodeEmitter {
                 _ => { panic!("Unhandled dest for displacement-only src") }
             },
             ArithQSrc::Imm(imm) => match dest.into() {
+                ArithQDest::Disp(disp) => {
+                    self.arithq_qword_disp_imm(arith, disp, imm);
+                },
                 ArithQDest::Reg64(RAX) => {
                     if (imm as i8 as i32) != imm {
                         self.arithq_rax_imm(arith, imm);
@@ -711,6 +733,27 @@ mod test {
 
             let mut c = CodeEmitter::new();
             c.arithq(op, reg, imm);
+            assert_eq!(c.code(), &hex[..]);
+        }
+    }
+
+    #[test]
+    fn test_arith_qword_disp_imm() {
+        let test_data = include_str!("x64_tests/arith_qword_disp_imm");
+        // CMP qword ptr [07fffffffh], 0ffh | 48813c25ffffff7fff000000
+        let qword_disp_imm_re = Regex::new(
+            r"([A-Z]+) qword ptr \[0([a-f0-9]+)h\], 0([a-f0-9]+)h \| ([a-f0-9]+)").unwrap();
+
+        for line in test_data.lines() {
+            println!("Testing, {}", line);
+            let caps = qword_disp_imm_re.captures(line).unwrap();
+            let op = str_to_arith(caps.at(1).unwrap());
+            let disp = i32::from_str_radix(caps.at(2).unwrap(), 16).unwrap();
+            let imm = i32::from_str_radix(caps.at(3).unwrap(), 16).unwrap();
+            let hex = hexstr_to_vec_u8(caps.at(4).unwrap());
+
+            let mut c = CodeEmitter::new();
+            c.arithq(op, Disp(disp), imm);
             assert_eq!(c.code(), &hex[..]);
         }
     }
