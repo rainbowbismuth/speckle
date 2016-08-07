@@ -29,7 +29,7 @@ pub enum Reg64 {
     R12,
     R13,
     R14,
-    R15
+    R15,
 }
 
 #[derive(Clone, Copy)]
@@ -81,7 +81,7 @@ pub enum Scale {
     One = 0,
     Two,
     Four,
-    Eight
+    Eight,
 }
 
 impl Scale {
@@ -154,7 +154,7 @@ pub enum ArithQSrc {
     Reg64Deref(Reg64Deref),
     Reg64Displacement(Reg64Displacement),
     Reg64BaseIdxScale(Reg64BaseIdxScale),
-    Reg64BaseIdxScaleDisplacement(Reg64BaseIdxScaleDisplacement)
+    Reg64BaseIdxScaleDisplacement(Reg64BaseIdxScaleDisplacement),
 }
 
 #[derive(Clone, Copy)]
@@ -167,7 +167,7 @@ pub enum ArithQDest {
     Reg64Deref(Reg64Deref),
     Reg64Displacement(Reg64Displacement),
     Reg64BaseIdxScale(Reg64BaseIdxScale),
-    Reg64BaseIdxScaleDisplacement(Reg64BaseIdxScaleDisplacement)    
+    Reg64BaseIdxScaleDisplacement(Reg64BaseIdxScaleDisplacement),
 }
 
 impl From<i32> for ArithQSrc {
@@ -259,7 +259,7 @@ pub enum ArithInstr {
     AND,
     SUB,
     XOR,
-    CMP
+    CMP,
 }
 
 impl ArithInstr {
@@ -274,7 +274,7 @@ pub enum Mod {
     Indirect = 0,
     OneByteDisp,
     FourByteDisp,
-    Register
+    Register,
 }
 
 impl Mod {
@@ -287,7 +287,7 @@ impl Mod {
 #[repr(u8)]
 pub enum RegDir {
     Src = 0b00,
-    Dest = 0b10
+    Dest = 0b10,
 }
 
 impl RegDir {
@@ -297,27 +297,30 @@ impl RegDir {
 }
 
 pub trait ArithQCompatible<Dest> {}
-impl<T> ArithQCompatible<Reg64> for T where T: Into<ArithQSrc> { }
-impl ArithQCompatible<Disp> for i32 { }
-impl ArithQCompatible<Reg64Deref> for i32 { }
-impl ArithQCompatible<Reg64Displacement> for i32 { }
-impl ArithQCompatible<Reg64BaseIdxScale> for i32 { }
-impl ArithQCompatible<Reg64BaseIdxScaleDisplacement> for i32 { }
-impl ArithQCompatible<Disp> for Reg64 { }
-impl ArithQCompatible<Reg64Deref> for Reg64 { }
-impl ArithQCompatible<Reg64Displacement> for Reg64 { }
-impl ArithQCompatible<Reg64BaseIdxScale> for Reg64 { }
-impl ArithQCompatible<Reg64BaseIdxScaleDisplacement> for Reg64 { }
+impl<T> ArithQCompatible<Reg64> for T where T: Into<ArithQSrc> {}
+impl ArithQCompatible<Disp> for i32 {}
+impl ArithQCompatible<Reg64Deref> for i32 {}
+impl ArithQCompatible<Reg64Displacement> for i32 {}
+impl ArithQCompatible<Reg64BaseIdxScale> for i32 {}
+impl ArithQCompatible<Reg64BaseIdxScaleDisplacement> for i32 {}
+impl ArithQCompatible<Disp> for Reg64 {}
+impl ArithQCompatible<Reg64Deref> for Reg64 {}
+impl ArithQCompatible<Reg64Displacement> for Reg64 {}
+impl ArithQCompatible<Reg64BaseIdxScale> for Reg64 {}
+impl ArithQCompatible<Reg64BaseIdxScaleDisplacement> for Reg64 {}
 
 
 struct InstructionBuilder {
     cur: usize,
-    buf: [u8; 16]
+    buf: [u8; 16],
 }
 
 impl InstructionBuilder {
     fn new() -> Self {
-        InstructionBuilder { cur: 0, buf: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]}
+        InstructionBuilder {
+            cur: 0,
+            buf: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        }
     }
 
     fn build(&self) -> &[u8] {
@@ -325,15 +328,15 @@ impl InstructionBuilder {
     }
 
     fn emit(&mut self, byte: u8) {
-        unsafe { *(self.buf.get_unchecked_mut(self.cur) as *mut u8) = byte; }
+        unsafe {
+            *(self.buf.get_unchecked_mut(self.cur) as *mut u8) = byte;
+        }
         self.cur += 1;
     }
 
     fn emit_rex_w(&mut self, rm_extension: bool, sib_extension: bool, reg_extension: bool) {
-        self.emit(0x48 + 
-            rm_extension as u8 + 
-            ((sib_extension as u8) << 1) + 
-            ((reg_extension as u8) << 2));
+        self.emit(0x48 + rm_extension as u8 + ((sib_extension as u8) << 1) +
+                  ((reg_extension as u8) << 2));
     }
 
     fn emit_mod_reg_rm(&mut self, modb: Mod, reg: u8, rm: u8) {
@@ -354,11 +357,10 @@ impl InstructionBuilder {
         self.emit(((imm >> 16) & 0xFF) as u8);
         self.emit(((imm >> 24) & 0xFF) as u8);
     }
-
 }
 
 pub struct CodeEmitter {
-    code: Vec<u8>
+    code: Vec<u8>,
 }
 
 impl CodeEmitter {
@@ -400,14 +402,18 @@ impl CodeEmitter {
         self.append(&builder);
     }
 
-    fn arithq_reg64_reg64_deref(&mut self, arith: ArithInstr, reg1: Reg64, dir: RegDir, reg2: Reg64Deref) {
+    fn arithq_reg64_reg64_deref(&mut self,
+                                arith: ArithInstr,
+                                reg1: Reg64,
+                                dir: RegDir,
+                                reg2: Reg64Deref) {
         let mut builder = InstructionBuilder::new();
         let Reg64Deref(deref_reg) = reg2;
 
         if deref_reg.is_rip(Mod::Indirect) {
             // avoid RIP relative addressing with deref_reg+0
             self.arithq_reg64_reg64_disp_no_zero_check(arith, reg1, dir, deref_reg + 0);
-            return;    
+            return;
         }
 
         builder.emit_rex_w(deref_reg.requires_ext(), false, reg1.requires_ext());
@@ -416,18 +422,26 @@ impl CodeEmitter {
 
         if deref_reg.wants_sib(Mod::Indirect) {
             builder.emit_sib(Scale::One, deref_reg.code(), deref_reg.code());
-        } 
+        }
         self.append(&builder);
     }
 
-    fn arithq_reg64_reg64_disp_no_zero_check(&mut self, arith: ArithInstr, reg1: Reg64, dir: RegDir, reg2: Reg64Displacement) {
+    fn arithq_reg64_reg64_disp_no_zero_check(&mut self,
+                                             arith: ArithInstr,
+                                             reg1: Reg64,
+                                             dir: RegDir,
+                                             reg2: Reg64Displacement) {
         let mut builder = InstructionBuilder::new();
         let Reg64Displacement(dis_reg, disp) = reg2;
         builder.emit_rex_w(dis_reg.requires_ext(), false, reg1.requires_ext());
         builder.emit(8 * arith.code() + dir.code() + 1);
 
         let one_byte = (disp as i8 as i32) == disp;
-        let modb = if one_byte { Mod::OneByteDisp } else { Mod::FourByteDisp };
+        let modb = if one_byte {
+            Mod::OneByteDisp
+        } else {
+            Mod::FourByteDisp
+        };
         builder.emit_mod_reg_rm(modb, reg1.code(), dis_reg.code());
 
         if dis_reg.wants_sib(modb) {
@@ -442,14 +456,18 @@ impl CodeEmitter {
         self.append(&builder);
     }
 
-    fn arithq_reg64_reg64_disp(&mut self, arith: ArithInstr, reg1: Reg64, dir: RegDir, reg2: Reg64Displacement) {
+    fn arithq_reg64_reg64_disp(&mut self,
+                               arith: ArithInstr,
+                               reg1: Reg64,
+                               dir: RegDir,
+                               reg2: Reg64Displacement) {
         let Reg64Displacement(dis_reg, disp) = reg2;
 
         if disp == 0 {
             self.arithq_reg64_reg64_deref(arith, reg1, dir, dis_reg.ptr());
         } else {
             self.arithq_reg64_reg64_disp_no_zero_check(arith, reg1, dir, reg2);
-        }        
+        }
     }
 
     fn inst_0x81_reg64_imm(&mut self, arith: ArithInstr, dst: Reg64, imm: i32) {
@@ -489,7 +507,8 @@ impl CodeEmitter {
     #[inline]
     pub fn arithq<Src, Dest>(&mut self, arith: ArithInstr, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
-              Dest: Into<ArithQDest> {
+              Dest: Into<ArithQDest>
+    {
         use self::Reg64::*;
         match src.into() {
             ArithQSrc::Disp(disp) => match dest.into() {
@@ -553,63 +572,71 @@ impl CodeEmitter {
     #[inline]
     pub fn add<Src, Dest>(&mut self, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
-              Dest: Into<ArithQDest> {
+              Dest: Into<ArithQDest>
+    {
         self.arithq(ArithInstr::ADD, dest, src);
     }
 
     #[inline]
     pub fn or<Src, Dest>(&mut self, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
-              Dest: Into<ArithQDest> {
+              Dest: Into<ArithQDest>
+    {
         self.arithq(ArithInstr::OR, dest, src);
     }
 
     #[inline]
     pub fn adc<Src, Dest>(&mut self, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
-              Dest: Into<ArithQDest> {
+              Dest: Into<ArithQDest>
+    {
         self.arithq(ArithInstr::ADC, dest, src);
     }
 
     #[inline]
     pub fn sbb<Src, Dest>(&mut self, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
-              Dest: Into<ArithQDest> {
+              Dest: Into<ArithQDest>
+    {
         self.arithq(ArithInstr::SBB, dest, src);
     }
 
     #[inline]
     pub fn and<Src, Dest>(&mut self, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
-              Dest: Into<ArithQDest> {
+              Dest: Into<ArithQDest>
+    {
         self.arithq(ArithInstr::AND, dest, src);
     }
 
     #[inline]
     pub fn sub<Src, Dest>(&mut self, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
-              Dest: Into<ArithQDest> {
+              Dest: Into<ArithQDest>
+    {
         self.arithq(ArithInstr::SUB, dest, src);
     }
 
     #[inline]
     pub fn xor<Src, Dest>(&mut self, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
-              Dest: Into<ArithQDest> {
+              Dest: Into<ArithQDest>
+    {
         self.arithq(ArithInstr::XOR, dest, src);
     }
 
     #[inline]
     pub fn cmp<Src, Dest>(&mut self, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
-              Dest: Into<ArithQDest> {
+              Dest: Into<ArithQDest>
+    {
         self.arithq(ArithInstr::CMP, dest, src);
     }
 }
 
 pub struct Code {
     ptr: *const u8,
-    size: usize
+    size: usize,
 }
 
 impl Code {
@@ -621,18 +648,21 @@ impl Code {
 impl Drop for Code {
     fn drop(&mut self) {
         if !self.ptr.is_null() {
-            unsafe { libc::munmap(self.ptr as *mut libc::c_void, self.size); }
+            unsafe {
+                libc::munmap(self.ptr as *mut libc::c_void, self.size);
+            }
             self.ptr = ptr::null();
         }
     }
 }
 
 pub unsafe fn alloc_exec(code: &[u8]) -> Code {
-    let res = libc::mmap(ptr::null_mut(), 
-              code.len(), 
-              libc::PROT_READ | libc::PROT_WRITE, 
-              libc::MAP_PRIVATE | libc::MAP_ANON, 
-              -1, 0);
+    let res = libc::mmap(ptr::null_mut(),
+                         code.len(),
+                         libc::PROT_READ | libc::PROT_WRITE,
+                         libc::MAP_PRIVATE | libc::MAP_ANON,
+                         -1,
+                         0);
     if res.is_null() {
         panic!("Could not allocate enough memory for new executable page");
     }
@@ -640,8 +670,8 @@ pub unsafe fn alloc_exec(code: &[u8]) -> Code {
     libc::mprotect(res, code.len(), libc::PROT_READ | libc::PROT_EXEC);
     return Code {
         ptr: res as *const u8,
-        size: code.len()
-    }
+        size: code.len(),
+    };
 }
 
 #[cfg(test)]
@@ -669,7 +699,7 @@ mod test {
             "R13" => R13,
             "R14" => R14,
             "R15" => R15,
-            _ => panic!("bad register")
+            _ => panic!("bad register"),
         }
     }
 
@@ -684,14 +714,14 @@ mod test {
             "SUB" => SUB,
             "XOR" => XOR,
             "CMP" => CMP,
-            _ => panic!("bad arith instruction")
+            _ => panic!("bad arith instruction"),
         }
     }
 
     fn hexstr_to_vec_u8(hex: &str) -> Vec<u8> {
         let mut out = vec![];
-        for i in 0..hex.len()/2 {
-            let byte = u8::from_str_radix(&hex[i*2..i*2+2], 16).unwrap();
+        for i in 0..hex.len() / 2 {
+            let byte = u8::from_str_radix(&hex[i * 2..i * 2 + 2], 16).unwrap();
             out.push(byte);
         }
         out
@@ -700,8 +730,8 @@ mod test {
     #[test]
     fn test_arith_reg64_reg64() {
         let test_data = include_str!("x64_tests/arith_reg64_reg64");
-        let reg64_reg64_re = Regex::new(
-            r"([A-Z]+) (R[A-Z0-9]+), (R[A-Z0-9]+) \| ([a-f0-9]+)").unwrap();
+        let reg64_reg64_re = Regex::new(r"([A-Z]+) (R[A-Z0-9]+), (R[A-Z0-9]+) \| ([a-f0-9]+)")
+            .unwrap();
 
         for line in test_data.lines() {
             println!("Testing, {}", line);
@@ -720,8 +750,8 @@ mod test {
     #[test]
     fn test_arith_reg64_imm() {
         let test_data = include_str!("x64_tests/arith_reg64_imm");
-        let reg64_imm_re = Regex::new(
-            r"([A-Z]+) (R[A-Z0-9]+), 0([a-f0-9]+)h \| ([a-f0-9]+)").unwrap();
+        let reg64_imm_re = Regex::new(r"([A-Z]+) (R[A-Z0-9]+), 0([a-f0-9]+)h \| ([a-f0-9]+)")
+            .unwrap();
 
         for line in test_data.lines() {
             println!("Testing, {}", line);
@@ -741,8 +771,9 @@ mod test {
     fn test_arith_qword_disp_imm() {
         let test_data = include_str!("x64_tests/arith_qword_disp_imm");
         // CMP qword ptr [07fffffffh], 0ffh | 48813c25ffffff7fff000000
-        let qword_disp_imm_re = Regex::new(
-            r"([A-Z]+) qword ptr \[0([a-f0-9]+)h\], 0([a-f0-9]+)h \| ([a-f0-9]+)").unwrap();
+        let qword_disp_imm_re =
+            Regex::new(r"([A-Z]+) qword ptr \[0([a-f0-9]+)h\], 0([a-f0-9]+)h \| ([a-f0-9]+)")
+                .unwrap();
 
         for line in test_data.lines() {
             println!("Testing, {}", line);
@@ -761,10 +792,10 @@ mod test {
     #[test]
     fn test_arith_reg64_disp() {
         let test_data = include_str!("x64_tests/arith_reg64_disp");
-        let reg64_disp_re = Regex::new(
-            r"([A-Z]+) (R[A-Z0-9]+), \[0([a-f0-9]+)h\] \| ([a-f0-9]+)").unwrap();
-        let disp_reg64_re = Regex::new(
-            r"([A-Z]+) \[0([a-f0-9]+)h\], (R[A-Z0-9]+) \| ([a-f0-9]+)").unwrap();
+        let reg64_disp_re = Regex::new(r"([A-Z]+) (R[A-Z0-9]+), \[0([a-f0-9]+)h\] \| ([a-f0-9]+)")
+            .unwrap();
+        let disp_reg64_re = Regex::new(r"([A-Z]+) \[0([a-f0-9]+)h\], (R[A-Z0-9]+) \| ([a-f0-9]+)")
+            .unwrap();
 
         for line in test_data.lines() {
             println!("Testing, {}", line);
@@ -794,10 +825,10 @@ mod test {
     #[test]
     fn test_arith_reg64_reg64_deref() {
         let test_data = include_str!("x64_tests/arith_reg64_reg64_deref");
-        let reg64_reg64_deref_re = Regex::new(
-            r"([A-Z]+) ([A-Z0-9]+), \[([A-Z0-9]+)\] \| ([a-f0-9]+)").unwrap();
-        let reg64_deref_reg64_re = Regex::new(
-            r"([A-Z]+) \[([A-Z0-9]+)\], ([A-Z0-9]+) \| ([a-f0-9]+)").unwrap();
+        let reg64_reg64_deref_re =
+            Regex::new(r"([A-Z]+) ([A-Z0-9]+), \[([A-Z0-9]+)\] \| ([a-f0-9]+)").unwrap();
+        let reg64_deref_reg64_re =
+            Regex::new(r"([A-Z]+) \[([A-Z0-9]+)\], ([A-Z0-9]+) \| ([a-f0-9]+)").unwrap();
 
         for line in test_data.lines() {
             println!("Testing, {}", line);
@@ -838,7 +869,11 @@ mod test {
                 let op = str_to_arith(caps.at(1).unwrap());
                 let reg = str_to_reg(caps.at(2).unwrap());
                 let base = str_to_reg(caps.at(3).unwrap());
-                let pm = if caps.at(4).unwrap() == "+" { 1 } else { -1 };
+                let pm = if caps.at(4).unwrap() == "+" {
+                    1
+                } else {
+                    -1
+                };
                 let disp = i32::from_str_radix(caps.at(5).unwrap(), 16).unwrap();
                 let hex = hexstr_to_vec_u8(caps.at(6).unwrap());
 
@@ -849,7 +884,11 @@ mod test {
                 let caps = reg64_disp_reg64_re.captures(line).unwrap();
                 let op = str_to_arith(caps.at(1).unwrap());
                 let base = str_to_reg(caps.at(2).unwrap());
-                let pm = if caps.at(3).unwrap() == "+" { 1 } else { -1 };
+                let pm = if caps.at(3).unwrap() == "+" {
+                    1
+                } else {
+                    -1
+                };
                 let disp = i32::from_str_radix(caps.at(4).unwrap(), 16).unwrap();
                 let reg = str_to_reg(caps.at(5).unwrap());
                 let hex = hexstr_to_vec_u8(caps.at(6).unwrap());
