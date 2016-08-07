@@ -2,6 +2,7 @@
 name = "speckle"
 version = "0.1.0"
 authors = ["Emily A. Bellows <emily.a.bellows@gmail.com>"]
+license = "MIT/Apache-2.0"
 
 [dependencies]
 libc = "0.2"
