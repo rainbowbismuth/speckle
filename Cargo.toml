@@ -1,0 +1,10 @@
+[package]
+name = "speckle"
+version = "0.1.0"
+authors = ["Emily A. Bellows <emily.a.bellows@gmail.com>"]
+
+[dependencies]
+libc = "0.2"
+
+[dev-dependencies]
+regex = "*"
