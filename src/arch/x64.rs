@@ -371,10 +371,14 @@ impl<'a> CodeEmitter<'a> {
         &mut self.buffer[0..self.cur]
     }
 
+    fn emit(&mut self, byte: u8) {
+        self.buffer[self.cur] = byte;
+        self.cur += 1;
+    }
+
     fn append(&mut self, ib: &InstructionBuilder) {
         for byte in ib.build() {
-            self.buffer[self.cur] = *byte;
-            self.cur += 1;
+            self.emit(*byte);
         }
     }
 
@@ -625,6 +629,10 @@ impl<'a> CodeEmitter<'a> {
     {
         self.arithq(ArithInstr::CMP, dest, src);
     }
+
+    pub fn ret(&mut self) {
+        self.emit(0xC3);
+    }
 }
 
 pub struct Code {
@@ -635,6 +643,10 @@ pub struct Code {
 impl Code {
     pub unsafe fn call(&self) {
         mem::transmute::<*const u8, extern "C" fn()>(self.ptr)();
+    }
+
+    pub unsafe fn call1(&self, arg: u64) -> u64 {
+        mem::transmute::<*const u8, extern "C" fn(u64) -> u64>(self.ptr)(arg)
     }
 }
 
@@ -649,22 +661,25 @@ impl Drop for Code {
     }
 }
 
-pub unsafe fn alloc_exec(code: &[u8]) -> Code {
-    let res = libc::mmap(ptr::null_mut(),
-                         code.len(),
-                         libc::PROT_READ | libc::PROT_WRITE,
-                         libc::MAP_PRIVATE | libc::MAP_ANON,
-                         -1,
-                         0);
-    if res.is_null() {
-        panic!("Could not allocate enough memory for new executable page");
+pub fn alloc_exec(code: &[u8]) -> Code {
+    unsafe {
+        let res = libc::mmap(ptr::null_mut(),
+                            code.len(),
+                            libc::PROT_READ | libc::PROT_WRITE,
+                            libc::MAP_PRIVATE | libc::MAP_ANON,
+                            -1,
+                            0);
+        if res.is_null() {
+            panic!("Could not allocate enough memory for new executable page");
+        }
+        ptr::copy_nonoverlapping(code.as_ptr(), res as *mut u8, code.len());
+        libc::mprotect(res, code.len(), libc::PROT_READ | libc::PROT_EXEC);
+
+        Code {
+            ptr: res as *const u8,
+            size: code.len(),
+        }
     }
-    ptr::copy_nonoverlapping(code.as_ptr(), res as *mut u8, code.len());
-    libc::mprotect(res, code.len(), libc::PROT_READ | libc::PROT_EXEC);
-    return Code {
-        ptr: res as *const u8,
-        size: code.len(),
-    };
 }
 
 #[cfg(test)]
@@ -675,6 +690,21 @@ mod test {
     use std::mem;
     use self::regex::Regex;
     use self::test::Bencher;
+
+    #[test]
+    #[cfg(all(any(unix, macos), target_arch="x86_64"))]
+    fn test_calling() {
+        use super::Reg64::*;
+        let mut buf: [u8; 64] = unsafe { mem::uninitialized() };
+        let mut c = CodeEmitter::new(&mut buf);
+        c.xor(RAX, RAX);
+        c.add(RAX, RDI);
+        c.add(RAX, RDI);
+        c.ret();
+        let code = alloc_exec(c.code());
+        let res = unsafe { code.call1(100) };
+        assert_eq!(res, 200);
+    }
 
     #[bench]
     fn emit_10_arith_instructions(b: &mut Bencher) {
