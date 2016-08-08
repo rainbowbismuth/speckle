@@ -319,7 +319,7 @@ impl InstructionBuilder {
     fn new() -> Self {
         InstructionBuilder {
             cur: 0,
-            buf: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            buf: unsafe { mem::uninitialized() }
         }
     }
 
@@ -328,9 +328,7 @@ impl InstructionBuilder {
     }
 
     fn emit(&mut self, byte: u8) {
-        unsafe {
-            *(self.buf.get_unchecked_mut(self.cur) as *mut u8) = byte;
-        }
+        self.buf[self.cur] = byte;
         self.cur += 1;
     }
 
@@ -671,9 +669,29 @@ pub unsafe fn alloc_exec(code: &[u8]) -> Code {
 
 #[cfg(test)]
 mod test {
+    extern crate test;
     extern crate regex;
     use super::*;
     use self::regex::Regex;
+    use self::test::Bencher;
+
+    #[bench]
+    fn emit_10_arith_instructions(b: &mut Bencher) {
+        use super::Reg64::*;
+        b.iter(|| {
+            let mut c = CodeEmitter::with_capacity(256);
+            c.add(RAX, RCX);
+            c.sub(RSP.ptr(), R10);
+            c.and(RSP, 0xFF);
+            c.or(RBX, R9.ptr());
+            c.sbb(RSI, R9+0x200);
+            c.xor(R8+0x20, R9);
+            c.and(RSP, R9);
+            c.or(RBX, R9.ptr());
+            c.sbb(RSI, R9+0x200);
+            c.xor(R8+0x20, R9);
+        });
+    }
 
     fn str_to_reg(reg: &str) -> Reg64 {
         use super::Reg64::*;
