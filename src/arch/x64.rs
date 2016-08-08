@@ -357,25 +357,25 @@ impl InstructionBuilder {
     }
 }
 
-pub struct CodeEmitter {
-    code: Vec<u8>,
+pub struct CodeEmitter<'a> {
+    cur: usize,
+    buffer: &'a mut [u8]
 }
 
-impl CodeEmitter {
-    pub fn new() -> Self {
-        CodeEmitter { code: vec![] }
+impl<'a> CodeEmitter<'a> {
+    pub fn new(buffer: &'a mut [u8]) -> Self {
+        CodeEmitter { cur: 0, buffer: buffer }
     }
 
-    pub fn with_capacity(bytes: usize) -> Self {
-        CodeEmitter { code: Vec::with_capacity(bytes) }
-    }
-
-    pub fn code(&self) -> &[u8] {
-        &self.code
+    pub fn code(self) -> &'a mut [u8] {
+        &mut self.buffer[0..self.cur]
     }
 
     fn append(&mut self, ib: &InstructionBuilder) {
-        self.code.extend_from_slice(ib.build());
+        for byte in ib.build() {
+            self.buffer[self.cur] = *byte;
+            self.cur += 1;
+        }
     }
 
     fn arithq_rax_imm(&mut self, arith: ArithInstr, imm: i32) {
@@ -672,6 +672,7 @@ mod test {
     extern crate test;
     extern crate regex;
     use super::*;
+    use std::mem;
     use self::regex::Regex;
     use self::test::Bencher;
 
@@ -679,7 +680,8 @@ mod test {
     fn emit_10_arith_instructions(b: &mut Bencher) {
         use super::Reg64::*;
         b.iter(|| {
-            let mut c = CodeEmitter::with_capacity(256);
+            let mut buf: [u8; 128] = unsafe { mem::uninitialized() };
+            let mut c = CodeEmitter::new(&mut buf);
             c.add(RAX, RCX);
             c.sub(RSP.ptr(), R10);
             c.and(RSP, 0xFF);
@@ -690,6 +692,7 @@ mod test {
             c.or(RBX, R9.ptr());
             c.sbb(RSI, R9+0x200);
             c.xor(R8+0x20, R9);
+            test::black_box(c.code());
         });
     }
 
@@ -754,7 +757,8 @@ mod test {
             let reg2 = str_to_reg(caps.at(3).unwrap());
             let hex = hexstr_to_vec_u8(caps.at(4).unwrap());
 
-            let mut c = CodeEmitter::new();
+            let mut buf: [u8; 128] = unsafe { mem::uninitialized() };
+            let mut c = CodeEmitter::new(&mut buf);
             c.arithq(op, reg1, reg2);
             assert_eq!(c.code(), &hex[..])
         }
@@ -774,7 +778,8 @@ mod test {
             let imm = i32::from_str_radix(caps.at(3).unwrap(), 16).unwrap();
             let hex = hexstr_to_vec_u8(caps.at(4).unwrap());
 
-            let mut c = CodeEmitter::new();
+            let mut buf: [u8; 128] = unsafe { mem::uninitialized() };
+            let mut c = CodeEmitter::new(&mut buf);
             c.arithq(op, reg, imm);
             assert_eq!(c.code(), &hex[..]);
         }
@@ -796,7 +801,8 @@ mod test {
             let imm = i32::from_str_radix(caps.at(3).unwrap(), 16).unwrap();
             let hex = hexstr_to_vec_u8(caps.at(4).unwrap());
 
-            let mut c = CodeEmitter::new();
+            let mut buf: [u8; 128] = unsafe { mem::uninitialized() };
+            let mut c = CodeEmitter::new(&mut buf);
             c.arithq(op, Disp(disp), imm);
             assert_eq!(c.code(), &hex[..]);
         }
@@ -818,7 +824,8 @@ mod test {
                 let disp = i32::from_str_radix(caps.at(3).unwrap(), 16).unwrap();
                 let hex = hexstr_to_vec_u8(caps.at(4).unwrap());
 
-                let mut c = CodeEmitter::new();
+                let mut buf: [u8; 128] = unsafe { mem::uninitialized() };
+                let mut c = CodeEmitter::new(&mut buf);
                 c.arithq(op, reg, Disp(disp));
                 assert_eq!(c.code(), &hex[..]);
             } else {
@@ -828,7 +835,8 @@ mod test {
                 let reg = str_to_reg(caps.at(3).unwrap());
                 let hex = hexstr_to_vec_u8(caps.at(4).unwrap());
 
-                let mut c = CodeEmitter::new();
+                let mut buf: [u8; 128] = unsafe { mem::uninitialized() };
+                let mut c = CodeEmitter::new(&mut buf);
                 c.arithq(op, Disp(disp), reg);
                 assert_eq!(c.code(), &hex[..]);
             }
@@ -851,7 +859,8 @@ mod test {
                 let src = str_to_reg(caps.at(3).unwrap());
                 let hex = hexstr_to_vec_u8(caps.at(4).unwrap());
 
-                let mut c = CodeEmitter::new();
+                let mut buf: [u8; 128] = unsafe { mem::uninitialized() };
+                let mut c = CodeEmitter::new(&mut buf);
                 c.arithq(op, dst, src.ptr());
                 assert_eq!(c.code(), &hex[..]);
             } else {
@@ -861,7 +870,8 @@ mod test {
                 let src = str_to_reg(caps.at(3).unwrap());
                 let hex = hexstr_to_vec_u8(caps.at(4).unwrap());
 
-                let mut c = CodeEmitter::new();
+                let mut buf: [u8; 128] = unsafe { mem::uninitialized() };
+                let mut c = CodeEmitter::new(&mut buf);
                 c.arithq(op, dst.ptr(), src);
                 assert_eq!(c.code(), &hex[..]);
             }
@@ -890,7 +900,8 @@ mod test {
                 let disp = i32::from_str_radix(caps.at(5).unwrap(), 16).unwrap();
                 let hex = hexstr_to_vec_u8(caps.at(6).unwrap());
 
-                let mut c = CodeEmitter::new();
+                let mut buf: [u8; 128] = unsafe { mem::uninitialized() };
+                let mut c = CodeEmitter::new(&mut buf);
                 c.arithq(op, reg, base + (pm * disp));
                 assert_eq!(c.code(), &hex[..]);
             } else {
@@ -906,7 +917,8 @@ mod test {
                 let reg = str_to_reg(caps.at(5).unwrap());
                 let hex = hexstr_to_vec_u8(caps.at(6).unwrap());
 
-                let mut c = CodeEmitter::new();
+                let mut buf: [u8; 128] = unsafe { mem::uninitialized() };
+                let mut c = CodeEmitter::new(&mut buf);
                 c.arithq(op, base + (pm * disp), reg);
                 assert_eq!(c.code(), &hex[..]);
             }
