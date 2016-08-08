@@ -368,6 +368,10 @@ impl CodeEmitter {
         CodeEmitter { code: vec![] }
     }
 
+    pub fn with_capacity(bytes: usize) -> Self {
+        CodeEmitter { code: Vec::with_capacity(bytes) }
+    }
+
     pub fn code(&self) -> &[u8] {
         &self.code
     }
@@ -504,7 +508,6 @@ impl CodeEmitter {
         self.append(&builder);
     }
 
-    #[inline]
     pub fn arithq<Src, Dest>(&mut self, arith: ArithInstr, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
               Dest: Into<ArithQDest>
@@ -569,7 +572,6 @@ impl CodeEmitter {
         }
     }
 
-    #[inline]
     pub fn add<Src, Dest>(&mut self, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
               Dest: Into<ArithQDest>
@@ -577,15 +579,13 @@ impl CodeEmitter {
         self.arithq(ArithInstr::ADD, dest, src);
     }
 
-    #[inline]
     pub fn or<Src, Dest>(&mut self, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
               Dest: Into<ArithQDest>
     {
         self.arithq(ArithInstr::OR, dest, src);
     }
-
-    #[inline]
+ 
     pub fn adc<Src, Dest>(&mut self, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
               Dest: Into<ArithQDest>
@@ -593,7 +593,6 @@ impl CodeEmitter {
         self.arithq(ArithInstr::ADC, dest, src);
     }
 
-    #[inline]
     pub fn sbb<Src, Dest>(&mut self, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
               Dest: Into<ArithQDest>
@@ -601,7 +600,6 @@ impl CodeEmitter {
         self.arithq(ArithInstr::SBB, dest, src);
     }
 
-    #[inline]
     pub fn and<Src, Dest>(&mut self, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
               Dest: Into<ArithQDest>
@@ -609,7 +607,6 @@ impl CodeEmitter {
         self.arithq(ArithInstr::AND, dest, src);
     }
 
-    #[inline]
     pub fn sub<Src, Dest>(&mut self, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
               Dest: Into<ArithQDest>
@@ -617,7 +614,6 @@ impl CodeEmitter {
         self.arithq(ArithInstr::SUB, dest, src);
     }
 
-    #[inline]
     pub fn xor<Src, Dest>(&mut self, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
               Dest: Into<ArithQDest>
@@ -625,7 +621,6 @@ impl CodeEmitter {
         self.arithq(ArithInstr::XOR, dest, src);
     }
 
-    #[inline]
     pub fn cmp<Src, Dest>(&mut self, dest: Dest, src: Src)
         where Src: Into<ArithQSrc> + ArithQCompatible<Dest>,
               Dest: Into<ArithQDest>
