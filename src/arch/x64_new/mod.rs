@@ -6,12 +6,5 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#![feature(test)]
-
-extern crate libc;
-
-mod arch;
-
-fn main() {
-    println!("Hello from Rust!");
-}
+pub mod types;
+pub mod generated;

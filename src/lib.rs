@@ -6,5 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-pub mod x64;
-pub mod x64_new;
+#![allow(dead_code)]
+
+extern crate libc;
+
+mod arch;

@@ -325,46 +325,46 @@ impl ArithQCompatible<Reg64BaseIdxScale> for Reg64 {}
 impl ArithQCompatible<Reg64BaseIdxScaleDisplacement> for Reg64 {}
 impl ArithQCompatible<ArithQDest> for Reg64 {}
 
-struct InstructionBuilder {
+pub struct InstructionBuilder {
     cur: usize,
     buf: [u8; 16],
 }
 
 impl InstructionBuilder {
-    fn new() -> Self {
+    pub fn new() -> Self {
         InstructionBuilder {
             cur: 0,
             buf: unsafe { mem::uninitialized() }
         }
     }
 
-    fn build(&self) -> &[u8] {
+    pub fn build(&self) -> &[u8] {
         &self.buf[0..self.cur]
     }
 
-    fn emit(&mut self, byte: u8) {
+    pub fn emit(&mut self, byte: u8) {
         self.buf[self.cur] = byte;
         self.cur += 1;
     }
 
-    fn emit_rex_w(&mut self, rm_extension: bool, sib_extension: bool, reg_extension: bool) {
+    pub fn emit_rex_w(&mut self, rm_extension: bool, sib_extension: bool, reg_extension: bool) {
         self.emit(0x48 + rm_extension as u8 + ((sib_extension as u8) << 1) +
                   ((reg_extension as u8) << 2));
     }
 
-    fn emit_mod_reg_rm(&mut self, modb: Mod, reg: u8, rm: u8) {
+    pub fn emit_mod_reg_rm(&mut self, modb: Mod, reg: u8, rm: u8) {
         assert!(reg <= 0b111);
         assert!(rm <= 0b111);
         self.emit(rm + (reg << 3) + (modb.code() << 6));
     }
 
-    fn emit_sib(&mut self, scale: Scale, index: u8, base: u8) {
+    pub fn emit_sib(&mut self, scale: Scale, index: u8, base: u8) {
         assert!(index <= 0b111);
         assert!(base <= 0b111);
         self.emit(base + (index << 3) + (scale.code() << 6));
     }
 
-    fn emit_imm_i32(&mut self, imm: i32) {
+    pub fn emit_imm_i32(&mut self, imm: i32) {
         self.emit((imm & 0xFF) as u8);
         self.emit(((imm >> 8) & 0xFF) as u8);
         self.emit(((imm >> 16) & 0xFF) as u8);
@@ -725,12 +725,10 @@ pub fn alloc_exec(code: &[u8]) -> Code {
 
 #[cfg(test)]
 mod test {
-    extern crate test;
     extern crate regex;
     use super::*;
     use std::mem;
     use self::regex::Regex;
-    use self::test::Bencher;
 
     #[test]
     #[cfg(all(any(unix, macos), target_arch="x86_64"))]
@@ -745,26 +743,6 @@ mod test {
         let code = alloc_exec(c.code());
         let res = unsafe { code.call1(100) };
         assert_eq!(res, 200);
-    }
-
-    #[bench]
-    fn emit_10_arith_instructions(b: &mut Bencher) {
-        use super::Reg64::*;
-        b.iter(|| {
-            let mut buf: [u8; 128] = unsafe { mem::uninitialized() };
-            let mut c = Assembler::new(&mut buf);
-            c.add(RAX, RCX);
-            c.sub(RSP.ptr(), R10);
-            c.and(RSP, 0xFF);
-            c.or(RBX, R9.ptr());
-            c.sbb(RSI, R9+0x200);
-            c.xor(R8+0x20, R9);
-            c.and(RSP, R9);
-            c.or(RBX, R9.ptr());
-            c.sbb(RSI, R9+0x200);
-            c.xor(R8+0x20, R9);
-            test::black_box(c.code());
-        });
     }
 
     fn str_to_reg(reg: &str) -> Reg64 {
