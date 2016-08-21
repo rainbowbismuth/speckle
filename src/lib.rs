@@ -6,8 +6,13 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#![allow(dead_code)]
+//! Speckle is a library for generating machine code.
+//!
+//! Currently it only implements a small subsection of the x86 and x64 ISA.
+
+// #![warn(missing_docs)]
 
 extern crate libc;
 
-mod arch;
+/// Encode x64 instructions.
+pub mod x64;
