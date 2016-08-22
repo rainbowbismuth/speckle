@@ -226,6 +226,8 @@ pub enum Error {
     MemoryToMemoryOp,
     /// You tried to combine operands of different sizes.
     ///
+    /// # Examples
+    ///
     /// ```
     /// use speckle::x64::Assembler;
     /// use speckle::x64::Register::*;
@@ -237,6 +239,8 @@ pub enum Error {
     ImmediateTooLarge,
     /// You tried to use a displacement too large for the instruction.
     DisplacementTooLarge,
+    /// You tried to use an invalid combination of same sized registers
+    InvalidRegisterCombination,
 }
 
 impl From<io::Error> for Error {
@@ -252,6 +256,26 @@ pub type Result<T> = result::Result<T, Error>;
 pub struct Assembler<Writer: io::Write> {
     /// The writer that the Assembler writes machine code to.
     pub writer: Writer
+}
+
+fn size_check(r1: Register, r2: Register) -> Result<()> {
+    if r1.size() != r2.size() {
+        Err(Error::MismatchedOperandSizes)
+    } else {
+        if r1.size() == Size::B8 && ((r1.needs_rex() && r2.never_rex()) || (r1.never_rex() && r2.needs_rex())) {
+            Err(Error::InvalidRegisterCombination)
+        } else {
+            Ok(())
+        }
+    }
+}
+
+fn rr_mod_rm(dst: Register, src: Register) -> u8 {
+    0b11000000 + dst.code() + (src.code() << 3)
+}
+
+fn rr_rex_xr(dst: Register, src: Register) -> u8 {
+    0x40 + (dst.ext() as u8) + ((src.ext() as u8) << 2)
 }
 
 impl<Writer: io::Write> Assembler<Writer> {
@@ -274,22 +298,27 @@ impl<Writer: io::Write> Assembler<Writer> {
         Ok(())
     }
 
+    fn rr_arith(&mut self, opcode: u8, dst: Register, src: Register) -> Result<()> {
+        try!(size_check(dst, src));
+        let modrm = rr_mod_rm(dst, src);
+        let rex = rr_rex_xr(dst, src);
+        match (dst.size(), dst.needs_rex() || src.needs_rex()) {
+            (Size::W16, true) => self.write(&[0x66, rex, opcode, modrm]),
+            (Size::W16, false) => self.write(&[0x66, opcode, modrm]),
+            (_, true) => self.write(&[rex, opcode, modrm]),
+            (_, false) => self.write(&[opcode, modrm])
+        }
+    }
+
     pub fn add<Dst, Src>(&mut self, dst: Dst, src: Src) -> Result<()>
         where Dst: Into<Operand>, Src: Into<Operand> {
         use self::Operand::*;
-        use self::Register::*;
         match (dst.into(), src.into()) {
-            (Reg(AL), Reg(src_reg)) => {
-                if src_reg.size() != Size::B {
-                    return Err(Error::MismatchedOperandSizes);
-                }
-                let opcode = 0;
-                let modrm = 0b11000000 + AL.code() << 3 + src_reg.code();
-                if src_reg.needs_rex() {
-                    let rex = 0x40 + if src_reg.ext() { 4 } else { 0 };
-                    self.write(&[rex, opcode, modrm])
+            (Reg(dst_reg), Reg(src_reg)) => {
+                if dst_reg.size() == Size::B8 {
+                    self.rr_arith(0, dst_reg, src_reg)
                 } else {
-                    self.write(&[opcode, modrm])
+                    self.rr_arith(1, dst_reg, src_reg)
                 }
             },
             _ => {
