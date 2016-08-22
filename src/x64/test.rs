@@ -15,16 +15,1891 @@ use super::*;
 use super::Register::*;
 
 #[test]
-fn test_add_EAX__SIL() {
+fn test_sub_ECX__EDX() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(EAX, SIL).is_err());
+    asm.sub(ECX, EDX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x29, 0xD1]);
 }
 
 #[test]
-fn test_add_AH__AH() {
+fn test_xor_EBP__ECX() {
     let mut asm = Assembler::new(vec![]);
-    asm.add(AH, AH).unwrap();
-    assert_eq!(asm.done().unwrap(), vec![0x00, 0xE4]);
+    asm.xor(EBP, ECX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x31, 0xCD]);
+}
+
+#[test]
+fn test_cmp_R12D__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R12D, BPL).is_err());
+}
+
+#[test]
+fn test_adc_ECX__RAX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(ECX, RAX).is_err());
+}
+
+#[test]
+fn test_cmp_SIL__R14B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(SIL, R14B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x38, 0xF6]);
+}
+
+#[test]
+fn test_cmp_R8D__CH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R8D, CH).is_err());
+}
+
+#[test]
+fn test_sbb_EBP__DIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(EBP, DIL).is_err());
+}
+
+#[test]
+fn test_and_AH__ECX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(AH, ECX).is_err());
+}
+
+#[test]
+fn test_or_RSI__R9D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(RSI, R9D).is_err());
+}
+
+#[test]
+fn test_or_R15B__AX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R15B, AX).is_err());
+}
+
+#[test]
+fn test_sub_RAX__R11B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(RAX, R11B).is_err());
+}
+
+#[test]
+fn test_sub_R11__BX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R11, BX).is_err());
+}
+
+#[test]
+fn test_xor_CH__CL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(CH, CL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x30, 0xCD]);
+}
+
+#[test]
+fn test_or_AL__AH() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(AL, AH).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x08, 0xE0]);
+}
+
+#[test]
+fn test_add_R11B__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R11B, RCX).is_err());
+}
+
+#[test]
+fn test_adc_RAX__DL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(RAX, DL).is_err());
+}
+
+#[test]
+fn test_sbb_CL__R10() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(CL, R10).is_err());
+}
+
+#[test]
+fn test_adc_RDI__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(RDI, RCX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x48, 0x11, 0xCF]);
+}
+
+#[test]
+fn test_sub_R9__R12D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R9, R12D).is_err());
+}
+
+#[test]
+fn test_add_CH__R14D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(CH, R14D).is_err());
+}
+
+#[test]
+fn test_adc_R15__R15D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R15, R15D).is_err());
+}
+
+#[test]
+fn test_add_R15__R15B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R15, R15B).is_err());
+}
+
+#[test]
+fn test_xor_DI__AL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(DI, AL).is_err());
+}
+
+#[test]
+fn test_xor_CX__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(CX, ESP).is_err());
+}
+
+#[test]
+fn test_sub_R13D__DL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R13D, DL).is_err());
+}
+
+#[test]
+fn test_sbb_RSI__CL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(RSI, CL).is_err());
+}
+
+#[test]
+fn test_sub_RDI__R8W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(RDI, R8W).is_err());
+}
+
+#[test]
+fn test_sbb_R11D__R15B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R11D, R15B).is_err());
+}
+
+#[test]
+fn test_sbb_DX__DI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(DX, DI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x19, 0xFA]);
+}
+
+#[test]
+fn test_sub_RSI__AH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(RSI, AH).is_err());
+}
+
+#[test]
+fn test_cmp_R15W__DX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(R15W, DX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x41, 0x39, 0xD7]);
+}
+
+#[test]
+fn test_sub_R8B__AX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R8B, AX).is_err());
+}
+
+#[test]
+fn test_and_R8B__CH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R8B, CH).is_err());
+}
+
+#[test]
+fn test_sbb_R10B__R10B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(R10B, R10B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x18, 0xD2]);
+}
+
+#[test]
+fn test_xor_DH__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(DH, R10D).is_err());
+}
+
+#[test]
+fn test_or_RAX__R9() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(RAX, R9).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4C, 0x09, 0xC8]);
+}
+
+#[test]
+fn test_and_BX__R14W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(BX, R14W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x44, 0x21, 0xF3]);
+}
+
+#[test]
+fn test_adc_R12W__R12W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(R12W, R12W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x45, 0x11, 0xE4]);
+}
+
+#[test]
+fn test_or_SIL__R15D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(SIL, R15D).is_err());
+}
+
+#[test]
+fn test_add_R10B__R8B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(R10B, R8B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x00, 0xC2]);
+}
+
+#[test]
+fn test_or_RSI__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(RSI, R12B).is_err());
+}
+
+#[test]
+fn test_and_RDI__R11D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(RDI, R11D).is_err());
+}
+
+#[test]
+fn test_sub_ECX__R12W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(ECX, R12W).is_err());
+}
+
+#[test]
+fn test_cmp_DI__CH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(DI, CH).is_err());
+}
+
+#[test]
+fn test_cmp_SI__R10W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(SI, R10W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x44, 0x39, 0xD6]);
+}
+
+#[test]
+fn test_sub_EAX__EBP() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(EAX, EBP).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x29, 0xE8]);
+}
+
+#[test]
+fn test_add_R14W__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R14W, ESP).is_err());
+}
+
+#[test]
+fn test_and_RDX__DIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(RDX, DIL).is_err());
+}
+
+#[test]
+fn test_xor_ECX__AH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(ECX, AH).is_err());
+}
+
+#[test]
+fn test_xor_R14W__EBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R14W, EBP).is_err());
+}
+
+#[test]
+fn test_xor_R12D__SPL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R12D, SPL).is_err());
+}
+
+#[test]
+fn test_or_RSP__RDX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(RSP, RDX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x48, 0x09, 0xD4]);
+}
+
+#[test]
+fn test_sub_R8B__R8D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R8B, R8D).is_err());
+}
+
+#[test]
+fn test_and_DIL__DX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(DIL, DX).is_err());
+}
+
+#[test]
+fn test_add_R13__CL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R13, CL).is_err());
+}
+
+#[test]
+fn test_sub_R8D__R13D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(R8D, R13D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x29, 0xE8]);
+}
+
+#[test]
+fn test_add_R15B__RDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R15B, RDI).is_err());
+}
+
+#[test]
+fn test_xor_CX__EDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(CX, EDI).is_err());
+}
+
+#[test]
+fn test_sbb_RDI__RBX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(RDI, RBX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x48, 0x19, 0xDF]);
+}
+
+#[test]
+fn test_cmp_R8__R12W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R8, R12W).is_err());
+}
+
+#[test]
+fn test_xor_DIL__R12() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(DIL, R12).is_err());
+}
+
+#[test]
+fn test_and_R12__R11() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(R12, R11).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4D, 0x21, 0xDC]);
+}
+
+#[test]
+fn test_add_CX__R13() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(CX, R13).is_err());
+}
+
+#[test]
+fn test_sbb_ESP__BP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(ESP, BP).is_err());
+}
+
+#[test]
+fn test_or_AX__R8W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(AX, R8W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x44, 0x09, 0xC0]);
+}
+
+#[test]
+fn test_or_AL__RSP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(AL, RSP).is_err());
+}
+
+#[test]
+fn test_adc_BPL__RAX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(BPL, RAX).is_err());
+}
+
+#[test]
+fn test_or_RDI__R13D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(RDI, R13D).is_err());
+}
+
+#[test]
+fn test_sbb_R14B__DI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R14B, DI).is_err());
+}
+
+#[test]
+fn test_xor_R10W__R10B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R10W, R10B).is_err());
+}
+
+#[test]
+fn test_cmp_SP__R9W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(SP, R9W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x44, 0x39, 0xCC]);
+}
+
+#[test]
+fn test_sbb_CL__R14D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(CL, R14D).is_err());
+}
+
+#[test]
+fn test_sub_R15W__SI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(R15W, SI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x41, 0x29, 0xF7]);
+}
+
+#[test]
+fn test_or_R10__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R10, R13W).is_err());
+}
+
+#[test]
+fn test_cmp_R14D__DI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R14D, DI).is_err());
+}
+
+#[test]
+fn test_or_R11W__DH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R11W, DH).is_err());
+}
+
+#[test]
+fn test_and_RSP__R11() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(RSP, R11).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4C, 0x21, 0xDC]);
+}
+
+#[test]
+fn test_and_R10W__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R10W, BPL).is_err());
+}
+
+#[test]
+fn test_xor_CX__R8D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(CX, R8D).is_err());
+}
+
+#[test]
+fn test_sbb_R8D__CH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R8D, CH).is_err());
+}
+
+#[test]
+fn test_add_EBX__R11() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(EBX, R11).is_err());
+}
+
+#[test]
+fn test_and_R11B__R15D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R11B, R15D).is_err());
+}
+
+#[test]
+fn test_or_EDX__RDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(EDX, RDX).is_err());
+}
+
+#[test]
+fn test_cmp_DH__CL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(DH, CL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x38, 0xCE]);
+}
+
+#[test]
+fn test_xor_SPL__R11W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(SPL, R11W).is_err());
+}
+
+#[test]
+fn test_add_R9W__ESI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R9W, ESI).is_err());
+}
+
+#[test]
+fn test_and_AL__DIL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(AL, DIL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x40, 0x20, 0xF8]);
+}
+
+#[test]
+fn test_adc_RCX__ESI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(RCX, ESI).is_err());
+}
+
+#[test]
+fn test_or_R12W__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R12W, ESP).is_err());
+}
+
+#[test]
+fn test_and_EBP__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(EBP, R13W).is_err());
+}
+
+#[test]
+fn test_adc_R13D__DX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R13D, DX).is_err());
+}
+
+#[test]
+fn test_and_R8D__R10W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R8D, R10W).is_err());
+}
+
+#[test]
+fn test_adc_CX__ECX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(CX, ECX).is_err());
+}
+
+#[test]
+fn test_sbb_RAX__R8D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(RAX, R8D).is_err());
+}
+
+#[test]
+fn test_adc_R8D__RAX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R8D, RAX).is_err());
+}
+
+#[test]
+fn test_add_BL__DX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(BL, DX).is_err());
+}
+
+#[test]
+fn test_sbb_DI__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(DI, EDX).is_err());
+}
+
+#[test]
+fn test_or_R12__RAX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(R12, RAX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x49, 0x09, 0xC4]);
+}
+
+#[test]
+fn test_and_CH__RSI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(CH, RSI).is_err());
+}
+
+#[test]
+fn test_xor_AH__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(AH, RCX).is_err());
+}
+
+#[test]
+fn test_sbb_AX__R8B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(AX, R8B).is_err());
+}
+
+#[test]
+fn test_xor_ESP__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(ESP, R10D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x31, 0xD4]);
+}
+
+#[test]
+fn test_adc_DL__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(DL, R10D).is_err());
+}
+
+#[test]
+fn test_and_CX__R10B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(CX, R10B).is_err());
+}
+
+#[test]
+fn test_sub_EBX__RDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(EBX, RDI).is_err());
+}
+
+#[test]
+fn test_add_RSP__AL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(RSP, AL).is_err());
+}
+
+#[test]
+fn test_adc_R15W__R15() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R15W, R15).is_err());
+}
+
+#[test]
+fn test_adc_R14B__ESI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R14B, ESI).is_err());
+}
+
+#[test]
+fn test_or_AX__R15B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(AX, R15B).is_err());
+}
+
+#[test]
+fn test_xor_BP__R15() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(BP, R15).is_err());
+}
+
+#[test]
+fn test_and_SPL__DI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(SPL, DI).is_err());
+}
+
+#[test]
+fn test_adc_BP__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(BP, R15W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x44, 0x11, 0xFD]);
+}
+
+#[test]
+fn test_adc_SIL__ECX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(SIL, ECX).is_err());
+}
+
+#[test]
+fn test_and_AH__R9() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(AH, R9).is_err());
+}
+
+#[test]
+fn test_sbb_DL__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(DL, SIL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x40, 0x18, 0xF2]);
+}
+
+#[test]
+fn test_or_DH__R9W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(DH, R9W).is_err());
+}
+
+#[test]
+fn test_xor_BX__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(BX, R10D).is_err());
+}
+
+#[test]
+fn test_sbb_R15B__RSP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R15B, RSP).is_err());
+}
+
+#[test]
+fn test_sub_R11B__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R11B, R15W).is_err());
+}
+
+#[test]
+fn test_sub_RAX__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(RAX, R15W).is_err());
+}
+
+#[test]
+fn test_xor_R9__R11W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R9, R11W).is_err());
+}
+
+#[test]
+fn test_and_AX__CX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(AX, CX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x21, 0xC8]);
+}
+
+#[test]
+fn test_xor_R11W__R9D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R11W, R9D).is_err());
+}
+
+#[test]
+fn test_adc_CX__RBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(CX, RBX).is_err());
+}
+
+#[test]
+fn test_cmp_DIL__R9B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(DIL, R9B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x38, 0xCF]);
+}
+
+#[test]
+fn test_xor_RSP__R15() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(RSP, R15).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4C, 0x31, 0xFC]);
+}
+
+#[test]
+fn test_and_DIL__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(DIL, ESP).is_err());
+}
+
+#[test]
+fn test_adc_CH__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(CH, ESP).is_err());
+}
+
+#[test]
+fn test_and_RBX__RBX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(RBX, RBX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x48, 0x21, 0xDB]);
+}
+
+#[test]
+fn test_and_ESP__CL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(ESP, CL).is_err());
+}
+
+#[test]
+fn test_sub_RCX__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(RCX, R12B).is_err());
+}
+
+#[test]
+fn test_sbb_R9D__R10() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R9D, R10).is_err());
+}
+
+#[test]
+fn test_sbb_R10__R12W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R10, R12W).is_err());
+}
+
+#[test]
+fn test_adc_CX__R12() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(CX, R12).is_err());
+}
+
+#[test]
+fn test_or_BH__SI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(BH, SI).is_err());
+}
+
+#[test]
+fn test_adc_R15B__EDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R15B, EDI).is_err());
+}
+
+#[test]
+fn test_or_RCX__R15() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(RCX, R15).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4C, 0x09, 0xF9]);
+}
+
+#[test]
+fn test_sub_DH__RSI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(DH, RSI).is_err());
+}
+
+#[test]
+fn test_add_R15__CH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R15, CH).is_err());
+}
+
+#[test]
+fn test_add_R15W__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R15W, R12B).is_err());
+}
+
+#[test]
+fn test_add_R13D__RBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R13D, RBP).is_err());
+}
+
+#[test]
+fn test_cmp_R13D__RAX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R13D, RAX).is_err());
+}
+
+#[test]
+fn test_add_BX__AL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(BX, AL).is_err());
+}
+
+#[test]
+fn test_or_R12__R13D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R12, R13D).is_err());
+}
+
+#[test]
+fn test_sub_RAX__BP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(RAX, BP).is_err());
+}
+
+#[test]
+fn test_xor_CX__DIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(CX, DIL).is_err());
+}
+
+#[test]
+fn test_and_RCX__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(RCX, R10D).is_err());
+}
+
+#[test]
+fn test_sbb_RDI__DX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(RDI, DX).is_err());
+}
+
+#[test]
+fn test_sub_AH__DIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(AH, DIL).is_err());
+}
+
+#[test]
+fn test_or_R14W__RBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R14W, RBP).is_err());
+}
+
+#[test]
+fn test_sub_ESI__BH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(ESI, BH).is_err());
+}
+
+#[test]
+fn test_adc_DL__RDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(DL, RDX).is_err());
+}
+
+#[test]
+fn test_or_BPL__DI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(BPL, DI).is_err());
+}
+
+#[test]
+fn test_sub_AX__R8D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(AX, R8D).is_err());
+}
+
+#[test]
+fn test_or_DL__RAX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(DL, RAX).is_err());
+}
+
+#[test]
+fn test_sub_R11D__R11D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(R11D, R11D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x29, 0xDB]);
+}
+
+#[test]
+fn test_and_R14D__EBX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(R14D, EBX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x21, 0xDE]);
+}
+
+#[test]
+fn test_or_R13__R9W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R13, R9W).is_err());
+}
+
+#[test]
+fn test_xor_R15D__R10B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R15D, R10B).is_err());
+}
+
+#[test]
+fn test_and_R11B__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(R11B, BPL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x20, 0xEB]);
+}
+
+#[test]
+fn test_and_R10D__R9D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(R10D, R9D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x21, 0xCA]);
+}
+
+#[test]
+fn test_and_RDI__BX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(RDI, BX).is_err());
+}
+
+#[test]
+fn test_cmp_RAX__R10W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(RAX, R10W).is_err());
+}
+
+#[test]
+fn test_sbb_SI__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(SI, ESP).is_err());
+}
+
+#[test]
+fn test_or_R10B__CH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R10B, CH).is_err());
+}
+
+#[test]
+fn test_sbb_SI__EDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(SI, EDI).is_err());
+}
+
+#[test]
+fn test_cmp_RCX__SI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(RCX, SI).is_err());
+}
+
+#[test]
+fn test_adc_R8W__RAX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R8W, RAX).is_err());
+}
+
+#[test]
+fn test_cmp_CH__EDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(CH, EDI).is_err());
+}
+
+#[test]
+fn test_add_R14__CX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R14, CX).is_err());
+}
+
+#[test]
+fn test_cmp_R15W__R11D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R15W, R11D).is_err());
+}
+
+#[test]
+fn test_sub_DIL__R15() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(DIL, R15).is_err());
+}
+
+#[test]
+fn test_sbb_RCX__R14() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(RCX, R14).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4C, 0x19, 0xF1]);
+}
+
+#[test]
+fn test_adc_RBX__EBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(RBX, EBP).is_err());
+}
+
+#[test]
+fn test_xor_R12__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R12, SIL).is_err());
+}
+
+#[test]
+fn test_and_SPL__R9D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(SPL, R9D).is_err());
+}
+
+#[test]
+fn test_sbb_RBX__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(RBX, R12B).is_err());
+}
+
+#[test]
+fn test_cmp_R15__R12() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(R15, R12).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4D, 0x39, 0xE7]);
+}
+
+#[test]
+fn test_adc_DIL__R15B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(DIL, R15B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x10, 0xFF]);
+}
+
+#[test]
+fn test_and_DI__R10() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(DI, R10).is_err());
+}
+
+#[test]
+fn test_or_RCX__EBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(RCX, EBX).is_err());
+}
+
+#[test]
+fn test_or_R13W__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R13W, BPL).is_err());
+}
+
+#[test]
+fn test_sbb_BPL__R9() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(BPL, R9).is_err());
+}
+
+#[test]
+fn test_sub_ESI__R12D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(ESI, R12D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x29, 0xE6]);
+}
+
+#[test]
+fn test_add_BL__DI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(BL, DI).is_err());
+}
+
+#[test]
+fn test_add_R8D__DH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R8D, DH).is_err());
+}
+
+#[test]
+fn test_sub_CX__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(CX, RCX).is_err());
+}
+
+#[test]
+fn test_xor_CX__RDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(CX, RDX).is_err());
+}
+
+#[test]
+fn test_cmp_R10W__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R10W, ESP).is_err());
+}
+
+#[test]
+fn test_add_BL__CL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(BL, CL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x00, 0xCB]);
+}
+
+#[test]
+fn test_xor_DI__CH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(DI, CH).is_err());
+}
+
+#[test]
+fn test_add_R12B__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(R12B, R12B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x00, 0xE4]);
+}
+
+#[test]
+fn test_xor_R11W__R8B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R11W, R8B).is_err());
+}
+
+#[test]
+fn test_adc_R13W__R8() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R13W, R8).is_err());
+}
+
+#[test]
+fn test_sbb_R10__R9B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R10, R9B).is_err());
+}
+
+#[test]
+fn test_cmp_DH__RSP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(DH, RSP).is_err());
+}
+
+#[test]
+fn test_xor_CL__DIL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(CL, DIL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x40, 0x30, 0xF9]);
+}
+
+#[test]
+fn test_cmp_EDX__R11B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(EDX, R11B).is_err());
+}
+
+#[test]
+fn test_adc_EDX__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(EDX, R13W).is_err());
+}
+
+#[test]
+fn test_and_RBP__R12() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(RBP, R12).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4C, 0x21, 0xE5]);
+}
+
+#[test]
+fn test_cmp_AX__R8D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(AX, R8D).is_err());
+}
+
+#[test]
+fn test_and_RDX__R15B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(RDX, R15B).is_err());
+}
+
+#[test]
+fn test_sbb_R8B__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(R8B, BPL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x18, 0xE8]);
+}
+
+#[test]
+fn test_xor_RCX__CX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(RCX, CX).is_err());
+}
+
+#[test]
+fn test_sbb_R9__EDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R9, EDI).is_err());
+}
+
+#[test]
+fn test_xor_AH__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(AH, R12B).is_err());
+}
+
+#[test]
+fn test_sub_AX__R9() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(AX, R9).is_err());
+}
+
+#[test]
+fn test_sub_R11B__DX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R11B, DX).is_err());
+}
+
+#[test]
+fn test_or_SPL__R12() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(SPL, R12).is_err());
+}
+
+#[test]
+fn test_cmp_R15B__RBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R15B, RBX).is_err());
+}
+
+#[test]
+fn test_xor_AL__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(AL, BPL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x40, 0x30, 0xE8]);
+}
+
+#[test]
+fn test_xor_BP__R13D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(BP, R13D).is_err());
+}
+
+#[test]
+fn test_sub_EBX__R15D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(EBX, R15D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x29, 0xFB]);
+}
+
+#[test]
+fn test_sub_R13__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R13, EDX).is_err());
+}
+
+#[test]
+fn test_cmp_DH__AH() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(DH, AH).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x38, 0xE6]);
+}
+
+#[test]
+fn test_sub_R9B__AH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R9B, AH).is_err());
+}
+
+#[test]
+fn test_or_BP__R8B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(BP, R8B).is_err());
+}
+
+#[test]
+fn test_or_ESP__DL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(ESP, DL).is_err());
+}
+
+#[test]
+fn test_or_BH__DL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(BH, DL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x08, 0xD7]);
+}
+
+#[test]
+fn test_xor_SI__DI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(SI, DI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x31, 0xFE]);
+}
+
+#[test]
+fn test_cmp_EDX__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(EDX, R10D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x39, 0xD2]);
+}
+
+#[test]
+fn test_and_DL__R14W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(DL, R14W).is_err());
+}
+
+#[test]
+fn test_cmp_R10B__R10B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(R10B, R10B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x38, 0xD2]);
+}
+
+#[test]
+fn test_or_BP__SP() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(BP, SP).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x09, 0xE5]);
+}
+
+#[test]
+fn test_xor_RBX__SI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(RBX, SI).is_err());
+}
+
+#[test]
+fn test_xor_R14W__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R14W, RCX).is_err());
+}
+
+#[test]
+fn test_sbb_R11__R15B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R11, R15B).is_err());
+}
+
+#[test]
+fn test_cmp_R13B__R13B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(R13B, R13B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x38, 0xED]);
+}
+
+#[test]
+fn test_and_DX__R13D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(DX, R13D).is_err());
+}
+
+#[test]
+fn test_xor_EDI__DL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(EDI, DL).is_err());
+}
+
+#[test]
+fn test_add_SIL__R15B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(SIL, R15B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x00, 0xFE]);
+}
+
+#[test]
+fn test_adc_R12B__R14D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R12B, R14D).is_err());
+}
+
+#[test]
+fn test_sbb_R8D__BH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R8D, BH).is_err());
+}
+
+#[test]
+fn test_and_CH__EAX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(CH, EAX).is_err());
+}
+
+#[test]
+fn test_sub_R11W__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R11W, R10D).is_err());
+}
+
+#[test]
+fn test_or_R10W__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R10W, ESP).is_err());
+}
+
+#[test]
+fn test_cmp_DI__R9() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(DI, R9).is_err());
+}
+
+#[test]
+fn test_cmp_EBX__BL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(EBX, BL).is_err());
+}
+
+#[test]
+fn test_xor_R11D__AH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R11D, AH).is_err());
+}
+
+#[test]
+fn test_add_R13W__RSP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R13W, RSP).is_err());
+}
+
+#[test]
+fn test_sbb_R10D__R14() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R10D, R14).is_err());
+}
+
+#[test]
+fn test_adc_BH__R13() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(BH, R13).is_err());
+}
+
+#[test]
+fn test_cmp_BP__DI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(BP, DI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x39, 0xFD]);
+}
+
+#[test]
+fn test_add_RBX__EBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(RBX, EBX).is_err());
+}
+
+#[test]
+fn test_cmp_R8B__R11W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R8B, R11W).is_err());
+}
+
+#[test]
+fn test_adc_ESP__EDI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(ESP, EDI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x11, 0xFC]);
+}
+
+#[test]
+fn test_xor_R8W__R13() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R8W, R13).is_err());
+}
+
+#[test]
+fn test_xor_AH__R8W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(AH, R8W).is_err());
+}
+
+#[test]
+fn test_sbb_R14D__EDI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(R14D, EDI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x19, 0xFE]);
+}
+
+#[test]
+fn test_sub_SPL__CL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(SPL, CL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x40, 0x28, 0xCC]);
+}
+
+#[test]
+fn test_cmp_ESP__RSI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(ESP, RSI).is_err());
+}
+
+#[test]
+fn test_and_R10B__SI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R10B, SI).is_err());
+}
+
+#[test]
+fn test_sub_AL__R10B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(AL, R10B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x28, 0xD0]);
+}
+
+#[test]
+fn test_sbb_RDX__RBP() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(RDX, RBP).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x48, 0x19, 0xEA]);
+}
+
+#[test]
+fn test_sbb_R15D__RDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R15D, RDI).is_err());
+}
+
+#[test]
+fn test_add_R10__R12() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(R10, R12).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4D, 0x01, 0xE2]);
+}
+
+#[test]
+fn test_xor_DIL__EAX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(DIL, EAX).is_err());
+}
+
+#[test]
+fn test_or_ECX__R10B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(ECX, R10B).is_err());
+}
+
+#[test]
+fn test_adc_R12B__R9W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R12B, R9W).is_err());
+}
+
+#[test]
+fn test_add_DX__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(DX, R15W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x44, 0x01, 0xFA]);
+}
+
+#[test]
+fn test_adc_RDI__RBX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(RDI, RBX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x48, 0x11, 0xDF]);
+}
+
+#[test]
+fn test_adc_R15__R12D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R15, R12D).is_err());
+}
+
+#[test]
+fn test_or_EBX__CX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(EBX, CX).is_err());
+}
+
+#[test]
+fn test_or_BX__R15B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(BX, R15B).is_err());
+}
+
+#[test]
+fn test_adc_R13W__DI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(R13W, DI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x41, 0x11, 0xFD]);
+}
+
+#[test]
+fn test_and_R15__DI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R15, DI).is_err());
+}
+
+#[test]
+fn test_or_R9B__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(R9B, R12B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x08, 0xE1]);
+}
+
+#[test]
+fn test_and_R11B__R12D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R11B, R12D).is_err());
+}
+
+#[test]
+fn test_and_DIL__BP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(DIL, BP).is_err());
+}
+
+#[test]
+fn test_xor_R12B__EBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R12B, EBX).is_err());
+}
+
+#[test]
+fn test_and_R13W__AH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R13W, AH).is_err());
+}
+
+#[test]
+fn test_sbb_R12B__EBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R12B, EBX).is_err());
+}
+
+#[test]
+fn test_add_R14__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R14, SIL).is_err());
+}
+
+#[test]
+fn test_cmp_SIL__R15D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(SIL, R15D).is_err());
+}
+
+#[test]
+fn test_xor_R13W__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(R13W, R13W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x45, 0x31, 0xED]);
+}
+
+#[test]
+fn test_add_ECX__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(ECX, R13W).is_err());
+}
+
+#[test]
+fn test_and_SP__R8() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(SP, R8).is_err());
+}
+
+#[test]
+fn test_xor_RDI__R12D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(RDI, R12D).is_err());
+}
+
+#[test]
+fn test_sbb_R8B__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R8B, ESP).is_err());
+}
+
+#[test]
+fn test_sbb_R12__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R12, SIL).is_err());
+}
+
+#[test]
+fn test_adc_R13B__R8B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(R13B, R8B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x10, 0xC5]);
+}
+
+#[test]
+fn test_sub_R10D__R13B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R10D, R13B).is_err());
+}
+
+#[test]
+fn test_and_R12B__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R12B, R13W).is_err());
+}
+
+#[test]
+fn test_or_ECX__R14W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(ECX, R14W).is_err());
+}
+
+#[test]
+fn test_add_ESP__R13() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(ESP, R13).is_err());
+}
+
+#[test]
+fn test_cmp_SP__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(SP, R10D).is_err());
+}
+
+#[test]
+fn test_adc_R8__R8() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(R8, R8).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4D, 0x11, 0xC0]);
+}
+
+#[test]
+fn test_sbb_AH__ECX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(AH, ECX).is_err());
+}
+
+#[test]
+fn test_or_R8W__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(R8W, R15W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x45, 0x09, 0xF8]);
+}
+
+#[test]
+fn test_cmp_R13D__R14B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R13D, R14B).is_err());
+}
+
+#[test]
+fn test_adc_R8B__R9() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R8B, R9).is_err());
+}
+
+#[test]
+fn test_cmp_DX__DX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(DX, DX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x39, 0xD2]);
+}
+
+#[test]
+fn test_sbb_R8__SPL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R8, SPL).is_err());
+}
+
+#[test]
+fn test_sbb_R8B__BH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R8B, BH).is_err());
+}
+
+#[test]
+fn test_cmp_EBP__R10W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(EBP, R10W).is_err());
+}
+
+#[test]
+fn test_or_BP__EDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(BP, EDI).is_err());
+}
+
+#[test]
+fn test_sub_DH__R9B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(DH, R9B).is_err());
+}
+
+#[test]
+fn test_or_R10__R9() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(R10, R9).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4D, 0x09, 0xCA]);
+}
+
+#[test]
+fn test_sub_R14__BX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R14, BX).is_err());
+}
+
+#[test]
+fn test_cmp_R14D__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(R14D, R10D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x39, 0xD6]);
+}
+
+#[test]
+fn test_xor_RSP__R11W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(RSP, R11W).is_err());
+}
+
+#[test]
+fn test_and_R11B__R10B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(R11B, R10B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x20, 0xD3]);
 }
 
 #[test]
@@ -35,15 +1910,1873 @@ fn test_add_AL__AL() {
 }
 
 #[test]
-fn test_add_AX__EAX() {
+fn test_or_R15B__R9D() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(AX, EAX).is_err());
+    assert!(asm.or(R15B, R9D).is_err());
 }
 
 #[test]
-fn test_add_R8B__RAX() {
+fn test_or_R14W__BX() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(R8B, RAX).is_err());
+    asm.or(R14W, BX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x41, 0x09, 0xDE]);
+}
+
+#[test]
+fn test_xor_RSI__R12W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(RSI, R12W).is_err());
+}
+
+#[test]
+fn test_sbb_RBX__ECX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(RBX, ECX).is_err());
+}
+
+#[test]
+fn test_add_AX__R13B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(AX, R13B).is_err());
+}
+
+#[test]
+fn test_adc_EDI__BX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(EDI, BX).is_err());
+}
+
+#[test]
+fn test_adc_R10D__R12D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(R10D, R12D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x11, 0xE2]);
+}
+
+#[test]
+fn test_adc_EBP__DX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(EBP, DX).is_err());
+}
+
+#[test]
+fn test_xor_BPL__R8W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(BPL, R8W).is_err());
+}
+
+#[test]
+fn test_sbb_BPL__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(BPL, ESP).is_err());
+}
+
+#[test]
+fn test_or_DIL__R15() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(DIL, R15).is_err());
+}
+
+#[test]
+fn test_cmp_R10D__DI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R10D, DI).is_err());
+}
+
+#[test]
+fn test_sub_DL__AH() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(DL, AH).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x28, 0xE2]);
+}
+
+#[test]
+fn test_or_BP__R11W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(BP, R11W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x44, 0x09, 0xDD]);
+}
+
+#[test]
+fn test_and_RDX__R14() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(RDX, R14).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4C, 0x21, 0xF2]);
+}
+
+#[test]
+fn test_add_DL__R9B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(DL, R9B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x00, 0xCA]);
+}
+
+#[test]
+fn test_adc_R15D__R10B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R15D, R10B).is_err());
+}
+
+#[test]
+fn test_sub_R12D__DL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R12D, DL).is_err());
+}
+
+#[test]
+fn test_adc_R11W__R8() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R11W, R8).is_err());
+}
+
+#[test]
+fn test_cmp_R11W__BP() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(R11W, BP).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x41, 0x39, 0xEB]);
+}
+
+#[test]
+fn test_add_R9W__R9B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R9W, R9B).is_err());
+}
+
+#[test]
+fn test_cmp_R15__R13B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R15, R13B).is_err());
+}
+
+#[test]
+fn test_sbb_DX__ESI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(DX, ESI).is_err());
+}
+
+#[test]
+fn test_adc_AX__CH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(AX, CH).is_err());
+}
+
+#[test]
+fn test_and_RBX__R8() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(RBX, R8).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4C, 0x21, 0xC3]);
+}
+
+#[test]
+fn test_adc_R8D__BL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R8D, BL).is_err());
+}
+
+#[test]
+fn test_and_R8B__ESI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R8B, ESI).is_err());
+}
+
+#[test]
+fn test_sub_R14B__R10() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R14B, R10).is_err());
+}
+
+#[test]
+fn test_sbb_CH__R13() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(CH, R13).is_err());
+}
+
+#[test]
+fn test_sub_RSP__EBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(RSP, EBX).is_err());
+}
+
+#[test]
+fn test_sub_R14B__RBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R14B, RBP).is_err());
+}
+
+#[test]
+fn test_xor_RBP__CL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(RBP, CL).is_err());
+}
+
+#[test]
+fn test_cmp_RBP__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(RBP, EDX).is_err());
+}
+
+#[test]
+fn test_and_R12B__R8D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R12B, R8D).is_err());
+}
+
+#[test]
+fn test_xor_BPL__R9D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(BPL, R9D).is_err());
+}
+
+#[test]
+fn test_and_DX__R12() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(DX, R12).is_err());
+}
+
+#[test]
+fn test_xor_R9B__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(R9B, SIL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x30, 0xF1]);
+}
+
+#[test]
+fn test_cmp_R14B__R14D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R14B, R14D).is_err());
+}
+
+#[test]
+fn test_xor_DIL__DIL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(DIL, DIL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x40, 0x30, 0xFF]);
+}
+
+#[test]
+fn test_adc_R8D__R10W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R8D, R10W).is_err());
+}
+
+#[test]
+fn test_and_R10B__BL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(R10B, BL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x20, 0xDA]);
+}
+
+#[test]
+fn test_sbb_AL__R12D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(AL, R12D).is_err());
+}
+
+#[test]
+fn test_or_R9__R12W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R9, R12W).is_err());
+}
+
+#[test]
+fn test_or_DH__R8B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(DH, R8B).is_err());
+}
+
+#[test]
+fn test_and_R10__R15D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R10, R15D).is_err());
+}
+
+#[test]
+fn test_sub_R9B__RBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R9B, RBP).is_err());
+}
+
+#[test]
+fn test_and_R8__ECX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R8, ECX).is_err());
+}
+
+#[test]
+fn test_adc_CL__CL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(CL, CL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x10, 0xC9]);
+}
+
+#[test]
+fn test_xor_DH__RAX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(DH, RAX).is_err());
+}
+
+#[test]
+fn test_sub_R12W__R8W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(R12W, R8W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x45, 0x29, 0xC4]);
+}
+
+#[test]
+fn test_add_R11D__R14() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R11D, R14).is_err());
+}
+
+#[test]
+fn test_sbb_R10B__R11() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R10B, R11).is_err());
+}
+
+#[test]
+fn test_and_EAX__RDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(EAX, RDX).is_err());
+}
+
+#[test]
+fn test_add_RSP__R14W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(RSP, R14W).is_err());
+}
+
+#[test]
+fn test_adc_R10D__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R10D, R15W).is_err());
+}
+
+#[test]
+fn test_or_AX__RDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(AX, RDX).is_err());
+}
+
+#[test]
+fn test_cmp_R15W__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(R15W, R15W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x45, 0x39, 0xFF]);
+}
+
+#[test]
+fn test_sub_R13__R11() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(R13, R11).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4D, 0x29, 0xDD]);
+}
+
+#[test]
+fn test_and_CL__BP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(CL, BP).is_err());
+}
+
+#[test]
+fn test_sbb_EDI__R9() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(EDI, R9).is_err());
+}
+
+#[test]
+fn test_or_R12W__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R12W, SIL).is_err());
+}
+
+#[test]
+fn test_cmp_R13W__EAX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R13W, EAX).is_err());
+}
+
+#[test]
+fn test_or_R11D__SI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R11D, SI).is_err());
+}
+
+#[test]
+fn test_sbb_SIL__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(SIL, SIL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x40, 0x18, 0xF6]);
+}
+
+#[test]
+fn test_or_BP__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(BP, R15W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x44, 0x09, 0xFD]);
+}
+
+#[test]
+fn test_sub_DIL__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(DIL, R15W).is_err());
+}
+
+#[test]
+fn test_or_R14W__R11D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R14W, R11D).is_err());
+}
+
+#[test]
+fn test_and_R14B__EBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R14B, EBP).is_err());
+}
+
+#[test]
+fn test_cmp_SP__R15() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(SP, R15).is_err());
+}
+
+#[test]
+fn test_xor_R9B__R8() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R9B, R8).is_err());
+}
+
+#[test]
+fn test_xor_R15B__R12() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R15B, R12).is_err());
+}
+
+#[test]
+fn test_sub_BP__R11() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(BP, R11).is_err());
+}
+
+#[test]
+fn test_and_BPL__EBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(BPL, EBP).is_err());
+}
+
+#[test]
+fn test_xor_R14W__BH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R14W, BH).is_err());
+}
+
+#[test]
+fn test_sbb_R9B__R8W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R9B, R8W).is_err());
+}
+
+#[test]
+fn test_sbb_R11W__R9B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R11W, R9B).is_err());
+}
+
+#[test]
+fn test_and_R15W__R13B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R15W, R13B).is_err());
+}
+
+#[test]
+fn test_sbb_R12B__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(R12B, BPL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x18, 0xEC]);
+}
+
+#[test]
+fn test_add_SI__R11W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(SI, R11W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x44, 0x01, 0xDE]);
+}
+
+#[test]
+fn test_xor_BP__BX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(BP, BX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x31, 0xDD]);
+}
+
+#[test]
+fn test_and_R15D__R10() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R15D, R10).is_err());
+}
+
+#[test]
+fn test_xor_R15__RAX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(R15, RAX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x49, 0x31, 0xC7]);
+}
+
+#[test]
+fn test_cmp_R11W__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(R11W, R13W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x45, 0x39, 0xEB]);
+}
+
+#[test]
+fn test_cmp_AL__RDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(AL, RDX).is_err());
+}
+
+#[test]
+fn test_and_R12__BL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R12, BL).is_err());
+}
+
+#[test]
+fn test_xor_SPL__EAX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(SPL, EAX).is_err());
+}
+
+#[test]
+fn test_or_RAX__R10W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(RAX, R10W).is_err());
+}
+
+#[test]
+fn test_xor_R14__R9D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R14, R9D).is_err());
+}
+
+#[test]
+fn test_or_R14D__AX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R14D, AX).is_err());
+}
+
+#[test]
+fn test_xor_RAX__DL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(RAX, DL).is_err());
+}
+
+#[test]
+fn test_and_R13__BL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R13, BL).is_err());
+}
+
+#[test]
+fn test_sbb_R9W__EAX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R9W, EAX).is_err());
+}
+
+#[test]
+fn test_sbb_R10W__R8W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(R10W, R8W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x45, 0x19, 0xC2]);
+}
+
+#[test]
+fn test_sub_R8W__R12W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(R8W, R12W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x45, 0x29, 0xE0]);
+}
+
+#[test]
+fn test_cmp_CL__BP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(CL, BP).is_err());
+}
+
+#[test]
+fn test_sbb_DIL__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(DIL, RCX).is_err());
+}
+
+#[test]
+fn test_cmp_BL__DL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(BL, DL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x38, 0xD3]);
+}
+
+#[test]
+fn test_and_ESI__RSI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(ESI, RSI).is_err());
+}
+
+#[test]
+fn test_adc_DH__R11B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(DH, R11B).is_err());
+}
+
+#[test]
+fn test_sbb_RSP__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(RSP, R15W).is_err());
+}
+
+#[test]
+fn test_sbb_R13__R9B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R13, R9B).is_err());
+}
+
+#[test]
+fn test_xor_R10__R9() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(R10, R9).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4D, 0x31, 0xCA]);
+}
+
+#[test]
+fn test_xor_DI__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(DI, R13W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x44, 0x31, 0xEF]);
+}
+
+#[test]
+fn test_add_R13D__R9B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R13D, R9B).is_err());
+}
+
+#[test]
+fn test_or_EDX__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(EDX, R10D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x09, 0xD2]);
+}
+
+#[test]
+fn test_adc_R9W__RDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R9W, RDI).is_err());
+}
+
+#[test]
+fn test_adc_R15D__RSI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R15D, RSI).is_err());
+}
+
+#[test]
+fn test_adc_DX__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(DX, ESP).is_err());
+}
+
+#[test]
+fn test_sbb_SI__RSP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(SI, RSP).is_err());
+}
+
+#[test]
+fn test_adc_R15B__R11W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R15B, R11W).is_err());
+}
+
+#[test]
+fn test_cmp_DI__R9B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(DI, R9B).is_err());
+}
+
+#[test]
+fn test_cmp_DIL__R14W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(DIL, R14W).is_err());
+}
+
+#[test]
+fn test_cmp_DH__R8() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(DH, R8).is_err());
+}
+
+#[test]
+fn test_add_AX__DL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(AX, DL).is_err());
+}
+
+#[test]
+fn test_adc_R10W__R13() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R10W, R13).is_err());
+}
+
+#[test]
+fn test_and_R14D__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R14D, R15W).is_err());
+}
+
+#[test]
+fn test_adc_R8W__RBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R8W, RBX).is_err());
+}
+
+#[test]
+fn test_add_RAX__R11W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(RAX, R11W).is_err());
+}
+
+#[test]
+fn test_sbb_RDI__R11() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(RDI, R11).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4C, 0x19, 0xDF]);
+}
+
+#[test]
+fn test_xor_DI__R8W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(DI, R8W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x44, 0x31, 0xC7]);
+}
+
+#[test]
+fn test_adc_R12W__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(R12W, R13W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x45, 0x11, 0xEC]);
+}
+
+#[test]
+fn test_sbb_DL__R11D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(DL, R11D).is_err());
+}
+
+#[test]
+fn test_xor_R12B__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(R12B, R12B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x30, 0xE4]);
+}
+
+#[test]
+fn test_cmp_R13__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R13, R15W).is_err());
+}
+
+#[test]
+fn test_add_RCX__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(RCX, BPL).is_err());
+}
+
+#[test]
+fn test_xor_R8B__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(R8B, SIL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x30, 0xF0]);
+}
+
+#[test]
+fn test_add_AX__R9B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(AX, R9B).is_err());
+}
+
+#[test]
+fn test_sub_CL__R12W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(CL, R12W).is_err());
+}
+
+#[test]
+fn test_cmp_R9B__R8B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(R9B, R8B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x38, 0xC1]);
+}
+
+#[test]
+fn test_cmp_ECX__R10() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(ECX, R10).is_err());
+}
+
+#[test]
+fn test_xor_ECX__R8D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(ECX, R8D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x31, 0xC1]);
+}
+
+#[test]
+fn test_add_R10__R15() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(R10, R15).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4D, 0x01, 0xFA]);
+}
+
+#[test]
+fn test_cmp_R10__R11B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R10, R11B).is_err());
+}
+
+#[test]
+fn test_adc_RSP__R12W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(RSP, R12W).is_err());
+}
+
+#[test]
+fn test_sub_R9__R15D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R9, R15D).is_err());
+}
+
+#[test]
+fn test_and_R12__R10W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R12, R10W).is_err());
+}
+
+#[test]
+fn test_and_R11__AX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R11, AX).is_err());
+}
+
+#[test]
+fn test_cmp_R13D__DL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R13D, DL).is_err());
+}
+
+#[test]
+fn test_or_DI__RBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(DI, RBP).is_err());
+}
+
+#[test]
+fn test_add_R15D__RBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R15D, RBX).is_err());
+}
+
+#[test]
+fn test_adc_R10__EBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R10, EBX).is_err());
+}
+
+#[test]
+fn test_sbb_AL__AH() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(AL, AH).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x18, 0xE0]);
+}
+
+#[test]
+fn test_sbb_ESI__CH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(ESI, CH).is_err());
+}
+
+#[test]
+fn test_and_BH__DX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(BH, DX).is_err());
+}
+
+#[test]
+fn test_cmp_SP__EBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(SP, EBX).is_err());
+}
+
+#[test]
+fn test_adc_RAX__R11D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(RAX, R11D).is_err());
+}
+
+#[test]
+fn test_add_R9D__BL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R9D, BL).is_err());
+}
+
+#[test]
+fn test_adc_EBP__EBP() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(EBP, EBP).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x11, 0xED]);
+}
+
+#[test]
+fn test_adc_R9B__R9D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R9B, R9D).is_err());
+}
+
+#[test]
+fn test_adc_EBX__DIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(EBX, DIL).is_err());
+}
+
+#[test]
+fn test_adc_EDX__R8B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(EDX, R8B).is_err());
+}
+
+#[test]
+fn test_cmp_R14D__R8() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R14D, R8).is_err());
+}
+
+#[test]
+fn test_sub_EDX__R14D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(EDX, R14D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x29, 0xF2]);
+}
+
+#[test]
+fn test_sub_R10__R10B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R10, R10B).is_err());
+}
+
+#[test]
+fn test_cmp_RSI__R15() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(RSI, R15).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4C, 0x39, 0xFE]);
+}
+
+#[test]
+fn test_sbb_R12D__BX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R12D, BX).is_err());
+}
+
+#[test]
+fn test_cmp_ESI__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(ESI, R13W).is_err());
+}
+
+#[test]
+fn test_sub_AH__R12W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(AH, R12W).is_err());
+}
+
+#[test]
+fn test_or_R13__SI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R13, SI).is_err());
+}
+
+#[test]
+fn test_sub_BH__RDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(BH, RDI).is_err());
+}
+
+#[test]
+fn test_or_BPL__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(BPL, BPL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x40, 0x08, 0xED]);
+}
+
+#[test]
+fn test_xor_R13__SI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R13, SI).is_err());
+}
+
+#[test]
+fn test_and_R9D__R10B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R9D, R10B).is_err());
+}
+
+#[test]
+fn test_and_SP__BX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(SP, BX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x21, 0xDC]);
+}
+
+#[test]
+fn test_xor_SP__R14D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(SP, R14D).is_err());
+}
+
+#[test]
+fn test_and_R15D__R11D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(R15D, R11D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x21, 0xDF]);
+}
+
+#[test]
+fn test_and_R14W__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R14W, RCX).is_err());
+}
+
+#[test]
+fn test_xor_AX__BX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(AX, BX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x31, 0xD8]);
+}
+
+#[test]
+fn test_add_R11B__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R11B, EDX).is_err());
+}
+
+#[test]
+fn test_adc_R11W__RBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R11W, RBP).is_err());
+}
+
+#[test]
+fn test_sbb_DX__R13D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(DX, R13D).is_err());
+}
+
+#[test]
+fn test_cmp_R15__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R15, SIL).is_err());
+}
+
+#[test]
+fn test_and_R11D__R13B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R11D, R13B).is_err());
+}
+
+#[test]
+fn test_sub_R8D__R12W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R8D, R12W).is_err());
+}
+
+#[test]
+fn test_or_R9W__R11D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R9W, R11D).is_err());
+}
+
+#[test]
+fn test_sub_R10B__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R10B, R10D).is_err());
+}
+
+#[test]
+fn test_sub_DH__AH() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(DH, AH).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x28, 0xE6]);
+}
+
+#[test]
+fn test_and_R13W__CX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(R13W, CX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x41, 0x21, 0xCD]);
+}
+
+#[test]
+fn test_adc_BPL__EBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(BPL, EBX).is_err());
+}
+
+#[test]
+fn test_xor_R8W__EBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R8W, EBP).is_err());
+}
+
+#[test]
+fn test_and_R12__ECX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R12, ECX).is_err());
+}
+
+#[test]
+fn test_adc_DI__BL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(DI, BL).is_err());
+}
+
+#[test]
+fn test_or_R9__ECX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R9, ECX).is_err());
+}
+
+#[test]
+fn test_xor_AX__R12D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(AX, R12D).is_err());
+}
+
+#[test]
+fn test_cmp_ECX__CL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(ECX, CL).is_err());
+}
+
+#[test]
+fn test_sbb_AL__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(AL, R13W).is_err());
+}
+
+#[test]
+fn test_or_CX__RDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(CX, RDI).is_err());
+}
+
+#[test]
+fn test_sub_R14B__EBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R14B, EBX).is_err());
+}
+
+#[test]
+fn test_sbb_DX__CX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(DX, CX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x19, 0xCA]);
+}
+
+#[test]
+fn test_cmp_ESP__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(ESP, R10D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x39, 0xD4]);
+}
+
+#[test]
+fn test_and_SIL__DIL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(SIL, DIL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x40, 0x20, 0xFE]);
+}
+
+#[test]
+fn test_sbb_R13B__CX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R13B, CX).is_err());
+}
+
+#[test]
+fn test_sub_R11B__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R11B, EDX).is_err());
+}
+
+#[test]
+fn test_sub_SIL__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(SIL, BPL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x40, 0x28, 0xEE]);
+}
+
+#[test]
+fn test_sbb_R14W__RSP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R14W, RSP).is_err());
+}
+
+#[test]
+fn test_add_BX__RBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(BX, RBP).is_err());
+}
+
+#[test]
+fn test_sbb_R9W__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(R9W, R15W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x45, 0x19, 0xF9]);
+}
+
+#[test]
+fn test_sbb_R9D__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R9D, R12B).is_err());
+}
+
+#[test]
+fn test_sbb_R12W__R13B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R12W, R13B).is_err());
+}
+
+#[test]
+fn test_add_R10W__R14D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R10W, R14D).is_err());
+}
+
+#[test]
+fn test_and_CX__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(CX, BPL).is_err());
+}
+
+#[test]
+fn test_and_AX__BL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(AX, BL).is_err());
+}
+
+#[test]
+fn test_xor_R8B__SPL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(R8B, SPL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x30, 0xE0]);
+}
+
+#[test]
+fn test_sub_DI__RBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(DI, RBP).is_err());
+}
+
+#[test]
+fn test_add_BPL__R14D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(BPL, R14D).is_err());
+}
+
+#[test]
+fn test_xor_R9__ECX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R9, ECX).is_err());
+}
+
+#[test]
+fn test_adc_R10__ECX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R10, ECX).is_err());
+}
+
+#[test]
+fn test_or_R12B__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R12B, ESP).is_err());
+}
+
+#[test]
+fn test_xor_DIL__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(DIL, BPL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x40, 0x30, 0xEF]);
+}
+
+#[test]
+fn test_adc_R8D__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R8D, R13W).is_err());
+}
+
+#[test]
+fn test_cmp_ESI__R9W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(ESI, R9W).is_err());
+}
+
+#[test]
+fn test_and_AL__R13B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(AL, R13B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x20, 0xE8]);
+}
+
+#[test]
+fn test_xor_EAX__R8B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(EAX, R8B).is_err());
+}
+
+#[test]
+fn test_xor_BPL__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(BPL, R13W).is_err());
+}
+
+#[test]
+fn test_cmp_RDI__DH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(RDI, DH).is_err());
+}
+
+#[test]
+fn test_add_EBP__RDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(EBP, RDX).is_err());
+}
+
+#[test]
+fn test_sub_R14__BH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R14, BH).is_err());
+}
+
+#[test]
+fn test_add_EBX__R11B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(EBX, R11B).is_err());
+}
+
+#[test]
+fn test_xor_R9W__DIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R9W, DIL).is_err());
+}
+
+#[test]
+fn test_sbb_SPL__R12W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(SPL, R12W).is_err());
+}
+
+#[test]
+fn test_or_DI__BP() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(DI, BP).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x09, 0xEF]);
+}
+
+#[test]
+fn test_sbb_R8__R13() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(R8, R13).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4D, 0x19, 0xE8]);
+}
+
+#[test]
+fn test_cmp_R13D__R9D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(R13D, R9D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x39, 0xCD]);
+}
+
+#[test]
+fn test_sub_R11W__SP() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(R11W, SP).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x41, 0x29, 0xE3]);
+}
+
+#[test]
+fn test_add_R10B__CX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R10B, CX).is_err());
+}
+
+#[test]
+fn test_adc_R8W__RSI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R8W, RSI).is_err());
+}
+
+#[test]
+fn test_sub_RCX__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(RCX, RCX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x48, 0x29, 0xC9]);
+}
+
+#[test]
+fn test_cmp_BL__RBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(BL, RBP).is_err());
+}
+
+#[test]
+fn test_and_SPL__R12D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(SPL, R12D).is_err());
+}
+
+#[test]
+fn test_adc_RDX__BH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(RDX, BH).is_err());
+}
+
+#[test]
+fn test_xor_AL__RBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(AL, RBX).is_err());
+}
+
+#[test]
+fn test_sub_R13__R15B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R13, R15B).is_err());
+}
+
+#[test]
+fn test_cmp_CX__R11B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(CX, R11B).is_err());
+}
+
+#[test]
+fn test_and_CX__R8W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(CX, R8W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x44, 0x21, 0xC1]);
+}
+
+#[test]
+fn test_adc_BX__R12() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(BX, R12).is_err());
+}
+
+#[test]
+fn test_xor_ESI__DX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(ESI, DX).is_err());
+}
+
+#[test]
+fn test_adc_RSP__R11B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(RSP, R11B).is_err());
+}
+
+#[test]
+fn test_and_RBP__RBX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(RBP, RBX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x48, 0x21, 0xDD]);
+}
+
+#[test]
+fn test_cmp_R11D__R14W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R11D, R14W).is_err());
+}
+
+#[test]
+fn test_add_CL__BX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(CL, BX).is_err());
+}
+
+#[test]
+fn test_xor_R11B__R14D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R11B, R14D).is_err());
+}
+
+#[test]
+fn test_adc_EDX__R14() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(EDX, R14).is_err());
+}
+
+#[test]
+fn test_cmp_R15D__R10B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R15D, R10B).is_err());
+}
+
+#[test]
+fn test_cmp_EBX__RDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(EBX, RDI).is_err());
+}
+
+#[test]
+fn test_cmp_DH__SI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(DH, SI).is_err());
+}
+
+#[test]
+fn test_or_R14__RDI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(R14, RDI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x49, 0x09, 0xFE]);
+}
+
+#[test]
+fn test_sbb_R11__R12W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R11, R12W).is_err());
+}
+
+#[test]
+fn test_adc_R14B__R15() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R14B, R15).is_err());
+}
+
+#[test]
+fn test_sbb_R10__AH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R10, AH).is_err());
+}
+
+#[test]
+fn test_or_SPL__R8W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(SPL, R8W).is_err());
+}
+
+#[test]
+fn test_and_DIL__R9B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(DIL, R9B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x20, 0xCF]);
+}
+
+#[test]
+fn test_cmp_DIL__BH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(DIL, BH).is_err());
+}
+
+#[test]
+fn test_and_AH__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(AH, BPL).is_err());
+}
+
+#[test]
+fn test_or_R14D__ESI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(R14D, ESI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x09, 0xF6]);
+}
+
+#[test]
+fn test_add_AL__R10() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(AL, R10).is_err());
+}
+
+#[test]
+fn test_sub_R9B__R9W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R9B, R9W).is_err());
+}
+
+#[test]
+fn test_and_SP__R15D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(SP, R15D).is_err());
+}
+
+#[test]
+fn test_or_R15__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R15, BPL).is_err());
+}
+
+#[test]
+fn test_and_BPL__R13D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(BPL, R13D).is_err());
+}
+
+#[test]
+fn test_add_R15D__R8W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R15D, R8W).is_err());
+}
+
+#[test]
+fn test_xor_SP__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(SP, R10D).is_err());
+}
+
+#[test]
+fn test_and_R12__R8W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R12, R8W).is_err());
+}
+
+#[test]
+fn test_and_R10D__R12() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R10D, R12).is_err());
+}
+
+#[test]
+fn test_cmp_R12W__RBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R12W, RBP).is_err());
+}
+
+#[test]
+fn test_add_DX__BX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(DX, BX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x01, 0xDA]);
+}
+
+#[test]
+fn test_sbb_AH__CX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(AH, CX).is_err());
+}
+
+#[test]
+fn test_adc_ESP__SP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(ESP, SP).is_err());
+}
+
+#[test]
+fn test_sbb_R15D__AH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R15D, AH).is_err());
+}
+
+#[test]
+fn test_adc_R15D__R13D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(R15D, R13D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x11, 0xEF]);
+}
+
+#[test]
+fn test_add_BP__BL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(BP, BL).is_err());
+}
+
+#[test]
+fn test_or_DX__R11() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(DX, R11).is_err());
+}
+
+#[test]
+fn test_or_ESP__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(ESP, EDX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x09, 0xD4]);
+}
+
+#[test]
+fn test_or_SPL__RBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(SPL, RBX).is_err());
+}
+
+#[test]
+fn test_cmp_R9W__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R9W, SIL).is_err());
+}
+
+#[test]
+fn test_cmp_R11__CL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R11, CL).is_err());
+}
+
+#[test]
+fn test_or_R12B__R14B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(R12B, R14B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x08, 0xF4]);
+}
+
+#[test]
+fn test_sub_BX__BP() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(BX, BP).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x29, 0xEB]);
+}
+
+#[test]
+fn test_xor_EAX__RBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(EAX, RBP).is_err());
+}
+
+#[test]
+fn test_xor_R11W__AH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R11W, AH).is_err());
+}
+
+#[test]
+fn test_cmp_EDI__R10B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(EDI, R10B).is_err());
+}
+
+#[test]
+fn test_and_RAX__R12D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(RAX, R12D).is_err());
+}
+
+#[test]
+fn test_sub_DI__R8() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(DI, R8).is_err());
+}
+
+#[test]
+fn test_adc_DIL__BX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(DIL, BX).is_err());
+}
+
+#[test]
+fn test_sub_R11W__RDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R11W, RDX).is_err());
+}
+
+#[test]
+fn test_xor_R14__R8W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R14, R8W).is_err());
+}
+
+#[test]
+fn test_adc_R8__AX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R8, AX).is_err());
+}
+
+#[test]
+fn test_sbb_R11__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R11, SIL).is_err());
+}
+
+#[test]
+fn test_xor_R12W__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R12W, RCX).is_err());
+}
+
+#[test]
+fn test_add_AL__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(AL, RCX).is_err());
+}
+
+#[test]
+fn test_adc_DX__CH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(DX, CH).is_err());
+}
+
+#[test]
+fn test_and_RAX__DH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(RAX, DH).is_err());
+}
+
+#[test]
+fn test_or_R15__R12W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R15, R12W).is_err());
+}
+
+#[test]
+fn test_and_R11B__R9D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R11B, R9D).is_err());
+}
+
+#[test]
+fn test_sbb_AX__ESI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(AX, ESI).is_err());
+}
+
+#[test]
+fn test_or_R11B__AH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R11B, AH).is_err());
+}
+
+#[test]
+fn test_xor_R8W__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R8W, SIL).is_err());
+}
+
+#[test]
+fn test_sub_R11D__RSP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R11D, RSP).is_err());
+}
+
+#[test]
+fn test_and_CL__AH() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(CL, AH).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x20, 0xE1]);
+}
+
+#[test]
+fn test_cmp_R9W__R13() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R9W, R13).is_err());
+}
+
+#[test]
+fn test_sub_R9B__R8W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R9B, R8W).is_err());
 }
 
 #[test]
@@ -54,160 +3787,2126 @@ fn test_add_AX__AX() {
 }
 
 #[test]
-fn test_add_R8B__EAX() {
+fn test_or_DL__EAX() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(R8B, EAX).is_err());
+    assert!(asm.or(DL, EAX).is_err());
 }
 
 #[test]
-fn test_add_EAX__R8B() {
+fn test_adc_CX__CH() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(EAX, R8B).is_err());
+    assert!(asm.adc(CX, CH).is_err());
 }
 
 #[test]
-fn test_add_AX__SIL() {
+fn test_and_R14B__R14() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(AX, SIL).is_err());
+    assert!(asm.and(R14B, R14).is_err());
 }
 
 #[test]
-fn test_add_R8B__SIL() {
+fn test_and_R15W__RDI() {
     let mut asm = Assembler::new(vec![]);
-    asm.add(R8B, SIL).unwrap();
-    assert_eq!(asm.done().unwrap(), vec![0x41, 0x00, 0xF0]);
+    assert!(asm.and(R15W, RDI).is_err());
 }
 
 #[test]
-fn test_add_SIL__R8B() {
+fn test_sbb_EBX__RBP() {
     let mut asm = Assembler::new(vec![]);
-    asm.add(SIL, R8B).unwrap();
-    assert_eq!(asm.done().unwrap(), vec![0x44, 0x00, 0xC6]);
+    assert!(asm.sbb(EBX, RBP).is_err());
 }
 
 #[test]
-fn test_add_AH__SIL() {
+fn test_and_R12B__AH() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(AH, SIL).is_err());
+    assert!(asm.and(R12B, AH).is_err());
 }
 
 #[test]
-fn test_add_AX__AL() {
+fn test_or_EDI__R9B() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(AX, AL).is_err());
+    assert!(asm.or(EDI, R9B).is_err());
 }
 
 #[test]
-fn test_add_AL__AX() {
+fn test_or_SPL__R11B() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(AL, AX).is_err());
+    asm.or(SPL, R11B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x08, 0xDC]);
 }
 
 #[test]
-fn test_add_AL__R8B() {
+fn test_sbb_BH__R14() {
     let mut asm = Assembler::new(vec![]);
-    asm.add(AL, R8B).unwrap();
-    assert_eq!(asm.done().unwrap(), vec![0x44, 0x00, 0xC0]);
+    assert!(asm.sbb(BH, R14).is_err());
 }
 
 #[test]
-fn test_add_R8B__AX() {
+fn test_xor_RBP__R8W() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(R8B, AX).is_err());
+    assert!(asm.xor(RBP, R8W).is_err());
 }
 
 #[test]
-fn test_add_SIL__AH() {
+fn test_or_RBX__EBP() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(SIL, AH).is_err());
+    assert!(asm.or(RBX, EBP).is_err());
 }
 
 #[test]
-fn test_add_AH__AL() {
+fn test_cmp_DIL__DIL() {
     let mut asm = Assembler::new(vec![]);
-    asm.add(AH, AL).unwrap();
-    assert_eq!(asm.done().unwrap(), vec![0x00, 0xC4]);
+    asm.cmp(DIL, DIL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x40, 0x38, 0xFF]);
 }
 
 #[test]
-fn test_add_SIL__RAX() {
+fn test_add_BL__RBP() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(SIL, RAX).is_err());
+    assert!(asm.add(BL, RBP).is_err());
 }
 
 #[test]
-fn test_add_SIL__AL() {
+fn test_or_R15W__EDI() {
     let mut asm = Assembler::new(vec![]);
-    asm.add(SIL, AL).unwrap();
-    assert_eq!(asm.done().unwrap(), vec![0x40, 0x00, 0xC6]);
+    assert!(asm.or(R15W, EDI).is_err());
 }
 
 #[test]
-fn test_add_EAX__AL() {
+fn test_add_RBP__RCX() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(EAX, AL).is_err());
+    asm.add(RBP, RCX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x48, 0x01, 0xCD]);
 }
 
 #[test]
-fn test_add_RAX__EAX() {
+fn test_xor_AL__BP() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(RAX, EAX).is_err());
+    assert!(asm.xor(AL, BP).is_err());
 }
 
 #[test]
-fn test_add_AX__AH() {
+fn test_cmp_SI__RAX() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(AX, AH).is_err());
+    assert!(asm.cmp(SI, RAX).is_err());
 }
 
 #[test]
-fn test_add_RAX__AH() {
+fn test_sbb_SI__R10B() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(RAX, AH).is_err());
+    assert!(asm.sbb(SI, R10B).is_err());
 }
 
 #[test]
-fn test_add_SIL__EAX() {
+fn test_sub_R8W__R14() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(SIL, EAX).is_err());
+    assert!(asm.sub(R8W, R14).is_err());
 }
 
 #[test]
-fn test_add_R8B__AL() {
+fn test_or_R9D__R12D() {
     let mut asm = Assembler::new(vec![]);
-    asm.add(R8B, AL).unwrap();
-    assert_eq!(asm.done().unwrap(), vec![0x41, 0x00, 0xC0]);
+    asm.or(R9D, R12D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x09, 0xE1]);
 }
 
 #[test]
-fn test_add_EAX__AH() {
+fn test_sbb_RAX__R10D() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(EAX, AH).is_err());
+    assert!(asm.sbb(RAX, R10D).is_err());
 }
 
 #[test]
-fn test_add_RAX__SIL() {
+fn test_and_R8D__AH() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(RAX, SIL).is_err());
+    assert!(asm.and(R8D, AH).is_err());
 }
 
 #[test]
-fn test_add_AH__AX() {
+fn test_add_SP__AL() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(AH, AX).is_err());
+    assert!(asm.add(SP, AL).is_err());
 }
 
 #[test]
-fn test_add_AL__AH() {
+fn test_add_BP__R8() {
     let mut asm = Assembler::new(vec![]);
-    asm.add(AL, AH).unwrap();
-    assert_eq!(asm.done().unwrap(), vec![0x00, 0xE0]);
+    assert!(asm.add(BP, R8).is_err());
 }
 
 #[test]
-fn test_add_SIL__AX() {
+fn test_add_ESI__EAX() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(SIL, AX).is_err());
+    asm.add(ESI, EAX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x01, 0xC6]);
+}
+
+#[test]
+fn test_or_SP__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(SP, SIL).is_err());
+}
+
+#[test]
+fn test_sub_RCX__CL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(RCX, CL).is_err());
+}
+
+#[test]
+fn test_adc_R11B__RDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R11B, RDI).is_err());
+}
+
+#[test]
+fn test_add_R15D__R9W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R15D, R9W).is_err());
+}
+
+#[test]
+fn test_or_EDI__R8D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(EDI, R8D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x09, 0xC7]);
+}
+
+#[test]
+fn test_xor_SPL__R9() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(SPL, R9).is_err());
+}
+
+#[test]
+fn test_xor_CX__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(CX, EDX).is_err());
+}
+
+#[test]
+fn test_adc_R10D__R8D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(R10D, R8D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x11, 0xC2]);
+}
+
+#[test]
+fn test_adc_R12B__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R12B, EDX).is_err());
+}
+
+#[test]
+fn test_cmp_R9D__R11D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(R9D, R11D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x39, 0xD9]);
+}
+
+#[test]
+fn test_sbb_R11D__R14W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R11D, R14W).is_err());
+}
+
+#[test]
+fn test_cmp_R15B__DL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(R15B, DL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x38, 0xD7]);
+}
+
+#[test]
+fn test_or_EAX__DX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(EAX, DX).is_err());
+}
+
+#[test]
+fn test_cmp_RDI__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(RDI, SIL).is_err());
+}
+
+#[test]
+fn test_adc_ECX__R11W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(ECX, R11W).is_err());
+}
+
+#[test]
+fn test_xor_RSP__R11D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(RSP, R11D).is_err());
+}
+
+#[test]
+fn test_sub_R9__R13B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R9, R13B).is_err());
+}
+
+#[test]
+fn test_and_EAX__SI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(EAX, SI).is_err());
+}
+
+#[test]
+fn test_sbb_R14D__CL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R14D, CL).is_err());
+}
+
+#[test]
+fn test_add_EBX__BX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(EBX, BX).is_err());
+}
+
+#[test]
+fn test_sbb_AH__DH() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(AH, DH).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x18, 0xF4]);
+}
+
+#[test]
+fn test_adc_EDI__SI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(EDI, SI).is_err());
+}
+
+#[test]
+fn test_add_R11__RDI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(R11, RDI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x49, 0x01, 0xFB]);
+}
+
+#[test]
+fn test_sbb_R13__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(R13, RCX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x49, 0x19, 0xCD]);
+}
+
+#[test]
+fn test_cmp_BX__DI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(BX, DI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x39, 0xFB]);
+}
+
+#[test]
+fn test_cmp_SI__RSI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(SI, RSI).is_err());
+}
+
+#[test]
+fn test_and_BH__BP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(BH, BP).is_err());
+}
+
+#[test]
+fn test_add_R10B__R9D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R10B, R9D).is_err());
+}
+
+#[test]
+fn test_and_RSI__EAX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(RSI, EAX).is_err());
+}
+
+#[test]
+fn test_cmp_R11D__R13B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R11D, R13B).is_err());
+}
+
+#[test]
+fn test_sbb_R11D__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R11D, R12B).is_err());
+}
+
+#[test]
+fn test_sbb_SPL__R9W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(SPL, R9W).is_err());
+}
+
+#[test]
+fn test_and_R10__SP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R10, SP).is_err());
+}
+
+#[test]
+fn test_add_R8B__R15B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(R8B, R15B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x00, 0xF8]);
+}
+
+#[test]
+fn test_cmp_R13__DH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R13, DH).is_err());
+}
+
+#[test]
+fn test_and_R14__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R14, R12B).is_err());
+}
+
+#[test]
+fn test_add_R8D__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R8D, R13W).is_err());
+}
+
+#[test]
+fn test_add_R12D__R10W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R12D, R10W).is_err());
+}
+
+#[test]
+fn test_sbb_R10D__R15D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(R10D, R15D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x19, 0xFA]);
+}
+
+#[test]
+fn test_or_RBP__R12() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(RBP, R12).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4C, 0x09, 0xE5]);
+}
+
+#[test]
+fn test_sub_R10B__R11B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(R10B, R11B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x28, 0xDA]);
+}
+
+#[test]
+fn test_or_DX__EBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(DX, EBP).is_err());
+}
+
+#[test]
+fn test_cmp_DL__R12W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(DL, R12W).is_err());
+}
+
+#[test]
+fn test_sbb_RAX__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(RAX, R12B).is_err());
+}
+
+#[test]
+fn test_sbb_EAX__R9W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(EAX, R9W).is_err());
+}
+
+#[test]
+fn test_sub_SP__R12() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(SP, R12).is_err());
+}
+
+#[test]
+fn test_and_ESI__SP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(ESI, SP).is_err());
+}
+
+#[test]
+fn test_cmp_R15__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(R15, RCX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x49, 0x39, 0xCF]);
+}
+
+#[test]
+fn test_or_R13W__EBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R13W, EBX).is_err());
+}
+
+#[test]
+fn test_xor_R10W__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R10W, RCX).is_err());
+}
+
+#[test]
+fn test_xor_RDI__BP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(RDI, BP).is_err());
+}
+
+#[test]
+fn test_sub_SPL__R13B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(SPL, R13B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x28, 0xEC]);
+}
+
+#[test]
+fn test_xor_R14W__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(R14W, R15W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x45, 0x31, 0xFE]);
+}
+
+#[test]
+fn test_and_RCX__R14D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(RCX, R14D).is_err());
+}
+
+#[test]
+fn test_and_R11B__CX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R11B, CX).is_err());
+}
+
+#[test]
+fn test_and_R13__RDI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(R13, RDI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x49, 0x21, 0xFD]);
+}
+
+#[test]
+fn test_xor_R8__RDX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(R8, RDX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x49, 0x31, 0xD0]);
+}
+
+#[test]
+fn test_sub_R14__R10B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R14, R10B).is_err());
+}
+
+#[test]
+fn test_sbb_R8__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R8, R12B).is_err());
+}
+
+#[test]
+fn test_or_SPL__R15D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(SPL, R15D).is_err());
+}
+
+#[test]
+fn test_add_SI__BH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(SI, BH).is_err());
+}
+
+#[test]
+fn test_or_RBX__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(RBX, R10D).is_err());
+}
+
+#[test]
+fn test_sub_RDX__R11B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(RDX, R11B).is_err());
+}
+
+#[test]
+fn test_sub_EBP__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(EBP, EDX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x29, 0xD5]);
+}
+
+#[test]
+fn test_cmp_SP__DIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(SP, DIL).is_err());
+}
+
+#[test]
+fn test_and_R8D__EBX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(R8D, EBX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x21, 0xD8]);
+}
+
+#[test]
+fn test_or_DX__R15B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(DX, R15B).is_err());
+}
+
+#[test]
+fn test_and_SP__DX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(SP, DX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x21, 0xD4]);
+}
+
+#[test]
+fn test_sbb_R12D__AH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R12D, AH).is_err());
+}
+
+#[test]
+fn test_sbb_ESI__R11W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(ESI, R11W).is_err());
+}
+
+#[test]
+fn test_adc_R12D__SI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R12D, SI).is_err());
+}
+
+#[test]
+fn test_cmp_BP__AL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(BP, AL).is_err());
+}
+
+#[test]
+fn test_sub_R11B__EBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R11B, EBP).is_err());
+}
+
+#[test]
+fn test_sbb_RSP__R15B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(RSP, R15B).is_err());
+}
+
+#[test]
+fn test_cmp_R10__R14W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R10, R14W).is_err());
+}
+
+#[test]
+fn test_cmp_R8B__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R8B, RCX).is_err());
+}
+
+#[test]
+fn test_sub_DH__DH() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(DH, DH).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x28, 0xF6]);
+}
+
+#[test]
+fn test_adc_RSI__BX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(RSI, BX).is_err());
+}
+
+#[test]
+fn test_sub_RBX__EDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(RBX, EDI).is_err());
+}
+
+#[test]
+fn test_sub_R8__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(R8, RCX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x49, 0x29, 0xC8]);
+}
+
+#[test]
+fn test_xor_R11D__AL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R11D, AL).is_err());
+}
+
+#[test]
+fn test_or_AX__R11B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(AX, R11B).is_err());
+}
+
+#[test]
+fn test_and_R14__EDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R14, EDI).is_err());
+}
+
+#[test]
+fn test_sbb_RDI__R15() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(RDI, R15).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4C, 0x19, 0xFF]);
+}
+
+#[test]
+fn test_add_AX__R14W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(AX, R14W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x44, 0x01, 0xF0]);
+}
+
+#[test]
+fn test_cmp_AH__R15B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(AH, R15B).is_err());
+}
+
+#[test]
+fn test_sbb_R9__R12D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R9, R12D).is_err());
+}
+
+#[test]
+fn test_sbb_R15B__R8D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R15B, R8D).is_err());
+}
+
+#[test]
+fn test_or_RDX__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(RDX, SIL).is_err());
+}
+
+#[test]
+fn test_cmp_SP__R11W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(SP, R11W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x44, 0x39, 0xDC]);
+}
+
+#[test]
+fn test_add_R14__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R14, R15W).is_err());
+}
+
+#[test]
+fn test_and_RBX__R13D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(RBX, R13D).is_err());
+}
+
+#[test]
+fn test_sub_R15B__BX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R15B, BX).is_err());
+}
+
+#[test]
+fn test_and_R14D__SI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R14D, SI).is_err());
+}
+
+#[test]
+fn test_or_R11D__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R11D, BPL).is_err());
+}
+
+#[test]
+fn test_or_EBX__EAX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(EBX, EAX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x09, 0xC3]);
+}
+
+#[test]
+fn test_add_BX__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(BX, RCX).is_err());
+}
+
+#[test]
+fn test_xor_R15W__AX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(R15W, AX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x41, 0x31, 0xC7]);
+}
+
+#[test]
+fn test_sub_ECX__R13D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(ECX, R13D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x29, 0xE9]);
+}
+
+#[test]
+fn test_add_DL__R15() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(DL, R15).is_err());
+}
+
+#[test]
+fn test_xor_BP__RSP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(BP, RSP).is_err());
+}
+
+#[test]
+fn test_and_BX__R11D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(BX, R11D).is_err());
+}
+
+#[test]
+fn test_sub_RDI__DH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(RDI, DH).is_err());
+}
+
+#[test]
+fn test_add_CH__R13D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(CH, R13D).is_err());
+}
+
+#[test]
+fn test_adc_R9D__RBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R9D, RBP).is_err());
+}
+
+#[test]
+fn test_sub_SP__R12W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(SP, R12W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x44, 0x29, 0xE4]);
+}
+
+#[test]
+fn test_sbb_AL__R13() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(AL, R13).is_err());
+}
+
+#[test]
+fn test_sbb_R14__BX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R14, BX).is_err());
+}
+
+#[test]
+fn test_cmp_DIL__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(DIL, SIL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x40, 0x38, 0xF7]);
+}
+
+#[test]
+fn test_or_BH__CH() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(BH, CH).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x08, 0xEF]);
+}
+
+#[test]
+fn test_sub_BL__SI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(BL, SI).is_err());
+}
+
+#[test]
+fn test_sub_DL__R12D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(DL, R12D).is_err());
+}
+
+#[test]
+fn test_or_AX__R15() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(AX, R15).is_err());
+}
+
+#[test]
+fn test_adc_R10B__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R10B, R13W).is_err());
+}
+
+#[test]
+fn test_xor_R14D__BH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R14D, BH).is_err());
+}
+
+#[test]
+fn test_add_EBX__R8D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(EBX, R8D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x01, 0xC3]);
+}
+
+#[test]
+fn test_and_R9W__R9B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R9W, R9B).is_err());
+}
+
+#[test]
+fn test_or_SI__EDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(SI, EDI).is_err());
+}
+
+#[test]
+fn test_sub_R11D__SI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R11D, SI).is_err());
+}
+
+#[test]
+fn test_or_R8W__R15D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R8W, R15D).is_err());
+}
+
+#[test]
+fn test_sub_R8W__AX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(R8W, AX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x41, 0x29, 0xC0]);
+}
+
+#[test]
+fn test_and_EBP__RDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(EBP, RDX).is_err());
+}
+
+#[test]
+fn test_or_R10B__R11D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R10B, R11D).is_err());
+}
+
+#[test]
+fn test_cmp_RBP__R13D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(RBP, R13D).is_err());
+}
+
+#[test]
+fn test_cmp_R13W__ECX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R13W, ECX).is_err());
+}
+
+#[test]
+fn test_sub_RAX__R12() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(RAX, R12).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4C, 0x29, 0xE0]);
+}
+
+#[test]
+fn test_sub_R12B__R8D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R12B, R8D).is_err());
+}
+
+#[test]
+fn test_add_SIL__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(SIL, RCX).is_err());
+}
+
+#[test]
+fn test_sub_BL__R13D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(BL, R13D).is_err());
+}
+
+#[test]
+fn test_or_R11__AX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R11, AX).is_err());
+}
+
+#[test]
+fn test_and_BX__R11() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(BX, R11).is_err());
+}
+
+#[test]
+fn test_adc_R8__RSI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(R8, RSI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x49, 0x11, 0xF0]);
+}
+
+#[test]
+fn test_adc_ESI__CH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(ESI, CH).is_err());
+}
+
+#[test]
+fn test_or_R15B__R10W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R15B, R10W).is_err());
+}
+
+#[test]
+fn test_adc_SPL__DIL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(SPL, DIL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x40, 0x10, 0xFC]);
+}
+
+#[test]
+fn test_sbb_R10W__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R10W, EDX).is_err());
+}
+
+#[test]
+fn test_or_R8B__R10B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(R8B, R10B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x08, 0xD0]);
+}
+
+#[test]
+fn test_sub_RAX__R15B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(RAX, R15B).is_err());
+}
+
+#[test]
+fn test_and_R9W__R11D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R9W, R11D).is_err());
+}
+
+#[test]
+fn test_or_R14B__R8D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R14B, R8D).is_err());
+}
+
+#[test]
+fn test_adc_R14W__AL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R14W, AL).is_err());
+}
+
+#[test]
+fn test_sbb_R12W__BH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R12W, BH).is_err());
+}
+
+#[test]
+fn test_add_R8B__RDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R8B, RDI).is_err());
+}
+
+#[test]
+fn test_adc_R15W__R11() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R15W, R11).is_err());
+}
+
+#[test]
+fn test_adc_R14B__CL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(R14B, CL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x10, 0xCE]);
+}
+
+#[test]
+fn test_and_RCX__AH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(RCX, AH).is_err());
+}
+
+#[test]
+fn test_adc_R13B__R9D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R13B, R9D).is_err());
+}
+
+#[test]
+fn test_adc_EBX__DH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(EBX, DH).is_err());
+}
+
+#[test]
+fn test_add_EDX__R9D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(EDX, R9D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x01, 0xCA]);
+}
+
+#[test]
+fn test_sbb_CX__DL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(CX, DL).is_err());
+}
+
+#[test]
+fn test_sbb_R9D__R14() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R9D, R14).is_err());
+}
+
+#[test]
+fn test_and_R11D__RAX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R11D, RAX).is_err());
+}
+
+#[test]
+fn test_and_R14B__R9() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R14B, R9).is_err());
+}
+
+#[test]
+fn test_sub_R9D__R10() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R9D, R10).is_err());
+}
+
+#[test]
+fn test_and_R14__R8B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R14, R8B).is_err());
+}
+
+#[test]
+fn test_or_R12D__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(R12D, R10D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x09, 0xD4]);
+}
+
+#[test]
+fn test_adc_AL__RSP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(AL, RSP).is_err());
+}
+
+#[test]
+fn test_and_SP__R10W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(SP, R10W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x44, 0x21, 0xD4]);
+}
+
+#[test]
+fn test_sub_R13W__R15B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R13W, R15B).is_err());
+}
+
+#[test]
+fn test_or_R12B__R15D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R12B, R15D).is_err());
+}
+
+#[test]
+fn test_xor_R12D__CL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R12D, CL).is_err());
+}
+
+#[test]
+fn test_or_R10W__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R10W, EDX).is_err());
+}
+
+#[test]
+fn test_adc_R10D__R8B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R10D, R8B).is_err());
+}
+
+#[test]
+fn test_or_CX__R14B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(CX, R14B).is_err());
+}
+
+#[test]
+fn test_add_R11W__R10W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(R11W, R10W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x45, 0x01, 0xD3]);
+}
+
+#[test]
+fn test_sub_RCX__ESI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(RCX, ESI).is_err());
+}
+
+#[test]
+fn test_adc_BP__R11D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(BP, R11D).is_err());
+}
+
+#[test]
+fn test_sbb_R10W__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R10W, R12B).is_err());
+}
+
+#[test]
+fn test_or_RBX__R8D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(RBX, R8D).is_err());
+}
+
+#[test]
+fn test_cmp_R13W__RSP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R13W, RSP).is_err());
+}
+
+#[test]
+fn test_sub_RBP__R12W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(RBP, R12W).is_err());
+}
+
+#[test]
+fn test_cmp_R15__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R15, EDX).is_err());
+}
+
+#[test]
+fn test_sub_CH__ESI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(CH, ESI).is_err());
+}
+
+#[test]
+fn test_sbb_R11B__AH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R11B, AH).is_err());
+}
+
+#[test]
+fn test_cmp_R14W__RBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R14W, RBX).is_err());
+}
+
+#[test]
+fn test_sbb_AH__BL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(AH, BL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x18, 0xDC]);
+}
+
+#[test]
+fn test_xor_R8B__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(R8B, BPL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x30, 0xE8]);
+}
+
+#[test]
+fn test_cmp_R9D__RDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R9D, RDI).is_err());
+}
+
+#[test]
+fn test_xor_R14D__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(R14D, EDX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x31, 0xD6]);
+}
+
+#[test]
+fn test_sub_AL__R10W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(AL, R10W).is_err());
+}
+
+#[test]
+fn test_sub_R8B__R9W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R8B, R9W).is_err());
+}
+
+#[test]
+fn test_or_R13D__RSI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R13D, RSI).is_err());
+}
+
+#[test]
+fn test_sbb_EBX__R8B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(EBX, R8B).is_err());
+}
+
+#[test]
+fn test_add_R12D__DI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R12D, DI).is_err());
+}
+
+#[test]
+fn test_cmp_R9D__BX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R9D, BX).is_err());
+}
+
+#[test]
+fn test_add_R11W__R14B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R11W, R14B).is_err());
+}
+
+#[test]
+fn test_sbb_DIL__CL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(DIL, CL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x40, 0x18, 0xCF]);
+}
+
+#[test]
+fn test_or_DIL__DIL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(DIL, DIL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x40, 0x08, 0xFF]);
+}
+
+#[test]
+fn test_xor_R8W__R14B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R8W, R14B).is_err());
+}
+
+#[test]
+fn test_sub_AX__R11B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(AX, R11B).is_err());
+}
+
+#[test]
+fn test_sbb_CH__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(CH, BPL).is_err());
+}
+
+#[test]
+fn test_or_EDX__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(EDX, R13W).is_err());
+}
+
+#[test]
+fn test_or_EAX__EDI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(EAX, EDI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x09, 0xF8]);
+}
+
+#[test]
+fn test_add_R13B__R14D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R13B, R14D).is_err());
+}
+
+#[test]
+fn test_sbb_R10D__R13B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R10D, R13B).is_err());
+}
+
+#[test]
+fn test_add_R12__R15D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R12, R15D).is_err());
+}
+
+#[test]
+fn test_sbb_DH__AL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(DH, AL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x18, 0xC6]);
+}
+
+#[test]
+fn test_or_R9D__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R9D, R15W).is_err());
+}
+
+#[test]
+fn test_sub_R11W__R10B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R11W, R10B).is_err());
+}
+
+#[test]
+fn test_add_RBP__R15() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(RBP, R15).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4C, 0x01, 0xFD]);
+}
+
+#[test]
+fn test_add_DL__R12D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(DL, R12D).is_err());
+}
+
+#[test]
+fn test_adc_R8B__BL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(R8B, BL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x10, 0xD8]);
+}
+
+#[test]
+fn test_sub_BX__DI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(BX, DI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x29, 0xFB]);
+}
+
+#[test]
+fn test_sbb_BL__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(BL, ESP).is_err());
+}
+
+#[test]
+fn test_and_R14__R8() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(R14, R8).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4D, 0x21, 0xC6]);
+}
+
+#[test]
+fn test_xor_RSI__AL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(RSI, AL).is_err());
+}
+
+#[test]
+fn test_adc_R15W__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R15W, EDX).is_err());
+}
+
+#[test]
+fn test_add_EBP__ESI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(EBP, ESI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x01, 0xF5]);
+}
+
+#[test]
+fn test_cmp_R14__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R14, EDX).is_err());
+}
+
+#[test]
+fn test_and_EDI__CL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(EDI, CL).is_err());
+}
+
+#[test]
+fn test_adc_R13B__DH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R13B, DH).is_err());
+}
+
+#[test]
+fn test_sub_DL__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(DL, BPL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x40, 0x28, 0xEA]);
+}
+
+#[test]
+fn test_add_R13W__R11W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(R13W, R11W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x45, 0x01, 0xDD]);
+}
+
+#[test]
+fn test_adc_R8B__CL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(R8B, CL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x10, 0xC8]);
+}
+
+#[test]
+fn test_cmp_EBX__ECX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(EBX, ECX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x39, 0xCB]);
+}
+
+#[test]
+fn test_sub_R10B__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R10B, ESP).is_err());
+}
+
+#[test]
+fn test_sbb_R14__R14() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(R14, R14).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4D, 0x19, 0xF6]);
+}
+
+#[test]
+fn test_add_AL__R9D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(AL, R9D).is_err());
+}
+
+#[test]
+fn test_adc_RSI__R10W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(RSI, R10W).is_err());
+}
+
+#[test]
+fn test_add_BP__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(BP, R12B).is_err());
+}
+
+#[test]
+fn test_cmp_R9B__R14B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(R9B, R14B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x38, 0xF1]);
+}
+
+#[test]
+fn test_and_EDI__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(EDI, R12B).is_err());
+}
+
+#[test]
+fn test_sub_R13W__R15() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R13W, R15).is_err());
+}
+
+#[test]
+fn test_and_RDI__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(RDI, R10D).is_err());
+}
+
+#[test]
+fn test_sub_BL__AL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(BL, AL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x28, 0xC3]);
+}
+
+#[test]
+fn test_or_R10__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R10, BPL).is_err());
+}
+
+#[test]
+fn test_adc_R12__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R12, R10D).is_err());
+}
+
+#[test]
+fn test_sbb_R13__BH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R13, BH).is_err());
+}
+
+#[test]
+fn test_or_R13D__DX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(R13D, DX).is_err());
+}
+
+#[test]
+fn test_adc_ECX__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(ECX, ESP).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x11, 0xE1]);
+}
+
+#[test]
+fn test_cmp_R8B__R15D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R8B, R15D).is_err());
+}
+
+#[test]
+fn test_add_SIL__EBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(SIL, EBP).is_err());
+}
+
+#[test]
+fn test_and_RDX__RBP() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(RDX, RBP).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x48, 0x21, 0xEA]);
+}
+
+#[test]
+fn test_add_R11__RSP() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(R11, RSP).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x49, 0x01, 0xE3]);
+}
+
+#[test]
+fn test_add_RBP__BX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(RBP, BX).is_err());
+}
+
+#[test]
+fn test_xor_R15B__BX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R15B, BX).is_err());
+}
+
+#[test]
+fn test_cmp_DX__AH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(DX, AH).is_err());
+}
+
+#[test]
+fn test_and_EBX__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(EBX, R15W).is_err());
+}
+
+#[test]
+fn test_adc_EAX__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(EAX, R13W).is_err());
+}
+
+#[test]
+fn test_add_RSI__R12() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(RSI, R12).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4C, 0x01, 0xE6]);
+}
+
+#[test]
+fn test_adc_DI__R13D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(DI, R13D).is_err());
+}
+
+#[test]
+fn test_add_R14B__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(R14B, SIL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x00, 0xF6]);
+}
+
+#[test]
+fn test_and_R14B__R10B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(R14B, R10B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x20, 0xD6]);
+}
+
+#[test]
+fn test_or_ECX__R13D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(ECX, R13D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x09, 0xE9]);
+}
+
+#[test]
+fn test_sbb_R9__RSI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(R9, RSI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x49, 0x19, 0xF1]);
+}
+
+#[test]
+fn test_add_R11D__R11() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R11D, R11).is_err());
+}
+
+#[test]
+fn test_and_EBP__SIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(EBP, SIL).is_err());
+}
+
+#[test]
+fn test_adc_SIL__R13W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(SIL, R13W).is_err());
+}
+
+#[test]
+fn test_cmp_R9__EBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R9, EBX).is_err());
+}
+
+#[test]
+fn test_add_EAX__R13D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(EAX, R13D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x01, 0xE8]);
+}
+
+#[test]
+fn test_sbb_EBX__RBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(EBX, RBX).is_err());
+}
+
+#[test]
+fn test_adc_R10W__EDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R10W, EDI).is_err());
+}
+
+#[test]
+fn test_and_R15W__AX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(R15W, AX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x41, 0x21, 0xC7]);
+}
+
+#[test]
+fn test_or_RDX__SI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(RDX, SI).is_err());
+}
+
+#[test]
+fn test_cmp_R10__DH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R10, DH).is_err());
+}
+
+#[test]
+fn test_sbb_R8B__R9B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(R8B, R9B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x18, 0xC8]);
+}
+
+#[test]
+fn test_and_R10W__RDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R10W, RDI).is_err());
+}
+
+#[test]
+fn test_or_BP__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(BP, BPL).is_err());
+}
+
+#[test]
+fn test_adc_R10B__AX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R10B, AX).is_err());
+}
+
+#[test]
+fn test_and_AX__RDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(AX, RDI).is_err());
+}
+
+#[test]
+fn test_xor_R12__R8B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R12, R8B).is_err());
+}
+
+#[test]
+fn test_and_R8B__SP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R8B, SP).is_err());
+}
+
+#[test]
+fn test_adc_AH__R8B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(AH, R8B).is_err());
+}
+
+#[test]
+fn test_sub_R12D__R8() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R12D, R8).is_err());
+}
+
+#[test]
+fn test_adc_R14D__R9() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R14D, R9).is_err());
+}
+
+#[test]
+fn test_and_R12W__R14() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R12W, R14).is_err());
+}
+
+#[test]
+fn test_and_R9B__R15() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R9B, R15).is_err());
+}
+
+#[test]
+fn test_add_R14D__DL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R14D, DL).is_err());
+}
+
+#[test]
+fn test_adc_EDX__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.adc(EDX, EDX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x11, 0xD2]);
+}
+
+#[test]
+fn test_xor_R11W__ESI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R11W, ESI).is_err());
+}
+
+#[test]
+fn test_sbb_R10__DH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R10, DH).is_err());
+}
+
+#[test]
+fn test_xor_R8W__CX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(R8W, CX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x41, 0x31, 0xC8]);
+}
+
+#[test]
+fn test_sbb_EAX__ECX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(EAX, ECX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x19, 0xC8]);
+}
+
+#[test]
+fn test_sbb_EDX__R14W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(EDX, R14W).is_err());
+}
+
+#[test]
+fn test_add_BL__BH() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(BL, BH).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x00, 0xFB]);
+}
+
+#[test]
+fn test_add_R10__R14B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R10, R14B).is_err());
+}
+
+#[test]
+fn test_sub_SIL__R11W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(SIL, R11W).is_err());
+}
+
+#[test]
+fn test_sbb_R12W__R14B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R12W, R14B).is_err());
+}
+
+#[test]
+fn test_and_R13B__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R13B, ESP).is_err());
+}
+
+#[test]
+fn test_cmp_R9__RSP() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(R9, RSP).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x49, 0x39, 0xE1]);
+}
+
+#[test]
+fn test_sbb_R9D__R12() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R9D, R12).is_err());
+}
+
+#[test]
+fn test_cmp_R10__SPL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R10, SPL).is_err());
+}
+
+#[test]
+fn test_or_R15W__SP() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(R15W, SP).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x41, 0x09, 0xE7]);
+}
+
+#[test]
+fn test_adc_BL__R12() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(BL, R12).is_err());
+}
+
+#[test]
+fn test_sbb_RBX__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(RBX, R15W).is_err());
+}
+
+#[test]
+fn test_sbb_R8D__R9() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R8D, R9).is_err());
+}
+
+#[test]
+fn test_add_R10__R11B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R10, R11B).is_err());
+}
+
+#[test]
+fn test_or_EBX__R11() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(EBX, R11).is_err());
+}
+
+#[test]
+fn test_sub_R14D__DH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R14D, DH).is_err());
+}
+
+#[test]
+fn test_sbb_R12__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R12, ESP).is_err());
+}
+
+#[test]
+fn test_sbb_R15W__R15() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R15W, R15).is_err());
+}
+
+#[test]
+fn test_cmp_DI__AL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(DI, AL).is_err());
+}
+
+#[test]
+fn test_add_R11W__RDI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R11W, RDI).is_err());
+}
+
+#[test]
+fn test_xor_R8W__R12D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(R8W, R12D).is_err());
+}
+
+#[test]
+fn test_adc_BPL__R14D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(BPL, R14D).is_err());
+}
+
+#[test]
+fn test_or_SIL__SP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(SIL, SP).is_err());
+}
+
+#[test]
+fn test_add_R13D__RBX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R13D, RBX).is_err());
+}
+
+#[test]
+fn test_and_R15B__ESI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(R15B, ESI).is_err());
+}
+
+#[test]
+fn test_add_R15B__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(R15B, BPL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x00, 0xEF]);
+}
+
+#[test]
+fn test_sub_EBX__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(EBX, BPL).is_err());
+}
+
+#[test]
+fn test_sub_AL__R11D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(AL, R11D).is_err());
+}
+
+#[test]
+fn test_sbb_R12B__R8D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R12B, R8D).is_err());
+}
+
+#[test]
+fn test_add_ESP__ECX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(ESP, ECX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x01, 0xCC]);
+}
+
+#[test]
+fn test_and_DI__R15B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(DI, R15B).is_err());
+}
+
+#[test]
+fn test_adc_R9W__EBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R9W, EBP).is_err());
+}
+
+#[test]
+fn test_cmp_ESP__R8D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(ESP, R8D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x39, 0xC4]);
+}
+
+#[test]
+fn test_xor_R13B__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(R13B, R12B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x30, 0xE5]);
+}
+
+#[test]
+fn test_cmp_R12B__R15B() {
+    let mut asm = Assembler::new(vec![]);
+    asm.cmp(R12B, R15B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x45, 0x38, 0xFC]);
+}
+
+#[test]
+fn test_sub_EDI__R12B() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(EDI, R12B).is_err());
+}
+
+#[test]
+fn test_cmp_RDX__R10W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(RDX, R10W).is_err());
+}
+
+#[test]
+fn test_xor_R14B__BL() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(R14B, BL).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x41, 0x30, 0xDE]);
+}
+
+#[test]
+fn test_sbb_BP__RBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(BP, RBP).is_err());
+}
+
+#[test]
+fn test_adc_AL__R11D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(AL, R11D).is_err());
+}
+
+#[test]
+fn test_adc_AX__EBP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(AX, EBP).is_err());
 }
 
 #[test]
@@ -218,58 +5917,290 @@ fn test_add_SIL__SIL() {
 }
 
 #[test]
-fn test_add_RAX__AL() {
+fn test_adc_DIL__R10B() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(RAX, AL).is_err());
+    asm.adc(DIL, R10B).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x10, 0xD7]);
 }
 
 #[test]
-fn test_add_AH__EAX() {
+fn test_adc_BP__R14D() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(AH, EAX).is_err());
+    assert!(asm.adc(BP, R14D).is_err());
 }
 
 #[test]
-fn test_add_AL__RAX() {
+fn test_adc_R10D__R13B() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(AL, RAX).is_err());
+    assert!(asm.adc(R10D, R13B).is_err());
 }
 
 #[test]
-fn test_add_RAX__R8B() {
+fn test_cmp_R8W__R10W() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(RAX, R8B).is_err());
+    asm.cmp(R8W, R10W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x45, 0x39, 0xD0]);
 }
 
 #[test]
-fn test_add_AH__RAX() {
+fn test_sub_RDX__R9B() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(AH, RAX).is_err());
+    assert!(asm.sub(RDX, R9B).is_err());
 }
 
 #[test]
-fn test_add_R8B__AH() {
+fn test_and_CH__EBP() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(R8B, AH).is_err());
+    assert!(asm.and(CH, EBP).is_err());
 }
 
 #[test]
-fn test_add_AL__SIL() {
+fn test_cmp_R15D__RCX() {
     let mut asm = Assembler::new(vec![]);
-    asm.add(AL, SIL).unwrap();
-    assert_eq!(asm.done().unwrap(), vec![0x40, 0x00, 0xF0]);
+    assert!(asm.cmp(R15D, RCX).is_err());
 }
 
 #[test]
-fn test_add_EAX__AX() {
+fn test_adc_BL__R15W() {
     let mut asm = Assembler::new(vec![]);
-    assert!(asm.add(EAX, AX).is_err());
+    assert!(asm.adc(BL, R15W).is_err());
 }
 
 #[test]
-fn test_add_EAX__EAX() {
+fn test_xor_CX__ESI() {
     let mut asm = Assembler::new(vec![]);
-    asm.add(EAX, EAX).unwrap();
-    assert_eq!(asm.done().unwrap(), vec![0x01, 0xC0]);
+    assert!(asm.xor(CX, ESI).is_err());
+}
+
+#[test]
+fn test_sub_R15B__R9D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R15B, R9D).is_err());
+}
+
+#[test]
+fn test_add_R8__RCX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.add(R8, RCX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x49, 0x01, 0xC8]);
+}
+
+#[test]
+fn test_sbb_R15W__DL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R15W, DL).is_err());
+}
+
+#[test]
+fn test_and_BL__AH() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(BL, AH).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x20, 0xE3]);
+}
+
+#[test]
+fn test_sub_R15B__CH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R15B, CH).is_err());
+}
+
+#[test]
+fn test_sbb_CL__AX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(CL, AX).is_err());
+}
+
+#[test]
+fn test_adc_DH__RSI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(DH, RSI).is_err());
+}
+
+#[test]
+fn test_sbb_R8__DL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R8, DL).is_err());
+}
+
+#[test]
+fn test_sub_CH__BH() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(CH, BH).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x28, 0xFD]);
+}
+
+#[test]
+fn test_add_RCX__BP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(RCX, BP).is_err());
+}
+
+#[test]
+fn test_cmp_R9D__R9() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R9D, R9).is_err());
+}
+
+#[test]
+fn test_sub_R14D__R8() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R14D, R8).is_err());
+}
+
+#[test]
+fn test_or_BH__R10D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.or(BH, R10D).is_err());
+}
+
+#[test]
+fn test_sub_ECX__ESI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(ECX, ESI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x29, 0xF1]);
+}
+
+#[test]
+fn test_xor_RBP__DIL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(RBP, DIL).is_err());
+}
+
+#[test]
+fn test_or_ECX__R14D() {
+    let mut asm = Assembler::new(vec![]);
+    asm.or(ECX, R14D).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x44, 0x09, 0xF1]);
+}
+
+#[test]
+fn test_add_R14__SI() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R14, SI).is_err());
+}
+
+#[test]
+fn test_sub_R12__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R12, EDX).is_err());
+}
+
+#[test]
+fn test_adc_R10__ESP() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.adc(R10, ESP).is_err());
+}
+
+#[test]
+fn test_sbb_SI__CL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(SI, CL).is_err());
+}
+
+#[test]
+fn test_sbb_SI__DI() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(SI, DI).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x19, 0xFE]);
+}
+
+#[test]
+fn test_add_R13B__R12D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R13B, R12D).is_err());
+}
+
+#[test]
+fn test_and_ESP__EDX() {
+    let mut asm = Assembler::new(vec![]);
+    asm.and(ESP, EDX).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x21, 0xD4]);
+}
+
+#[test]
+fn test_sbb_SI__BPL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(SI, BPL).is_err());
+}
+
+#[test]
+fn test_sbb_R11B__R10() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R11B, R10).is_err());
+}
+
+#[test]
+fn test_sbb_R12W__R9() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R12W, R9).is_err());
+}
+
+#[test]
+fn test_xor_RBP__R14() {
+    let mut asm = Assembler::new(vec![]);
+    asm.xor(RBP, R14).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x4C, 0x31, 0xF5]);
+}
+
+#[test]
+fn test_sub_R15B__BH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sub(R15B, BH).is_err());
+}
+
+#[test]
+fn test_sbb_EBP__R15W() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(EBP, R15W).is_err());
+}
+
+#[test]
+fn test_sbb_BX__R9() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(BX, R9).is_err());
+}
+
+#[test]
+fn test_add_R14D__BH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.add(R14D, BH).is_err());
+}
+
+#[test]
+fn test_cmp_R15D__BX() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.cmp(R15D, BX).is_err());
+}
+
+#[test]
+fn test_xor_EBX__BL() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.xor(EBX, BL).is_err());
+}
+
+#[test]
+fn test_sub_ESI__EBP() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sub(ESI, EBP).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x29, 0xEE]);
+}
+
+#[test]
+fn test_sbb_R12__DH() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.sbb(R12, DH).is_err());
+}
+
+#[test]
+fn test_and_RSP__R9D() {
+    let mut asm = Assembler::new(vec![]);
+    assert!(asm.and(RSP, R9D).is_err());
+}
+
+#[test]
+fn test_sbb_CX__R9W() {
+    let mut asm = Assembler::new(vec![]);
+    asm.sbb(CX, R9W).unwrap();
+    assert_eq!(asm.done().unwrap(), vec![0x66, 0x44, 0x19, 0xC9]);
 }
 

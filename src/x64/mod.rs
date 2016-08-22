@@ -275,7 +275,21 @@ fn rr_mod_rm(dst: Register, src: Register) -> u8 {
 }
 
 fn rr_rex_xr(dst: Register, src: Register) -> u8 {
-    0x40 + (dst.ext() as u8) + ((src.ext() as u8) << 2)
+    let base = if dst.size() == Size::Q64 { 0x48 } else { 0x40 };
+    base + (dst.ext() as u8) + ((src.ext() as u8) << 2) 
+}
+
+#[derive(Copy, Clone)]
+#[repr(u8)]
+enum Arith {
+    ADD = 0,
+    OR = 1,
+    ADC = 2,
+    SBB = 3,
+    AND = 4,
+    SUB = 5,
+    XOR = 6,
+    CMP = 7 
 }
 
 impl<Writer: io::Write> Assembler<Writer> {
@@ -310,20 +324,59 @@ impl<Writer: io::Write> Assembler<Writer> {
         }
     }
 
-    pub fn add<Dst, Src>(&mut self, dst: Dst, src: Src) -> Result<()>
-        where Dst: Into<Operand>, Src: Into<Operand> {
+    fn gen_arith(&mut self, arith: Arith, dst_op: Operand, src_op: Operand) -> Result<()> {
         use self::Operand::*;
-        match (dst.into(), src.into()) {
-            (Reg(dst_reg), Reg(src_reg)) => {
-                if dst_reg.size() == Size::B8 {
-                    self.rr_arith(0, dst_reg, src_reg)
+        match (dst_op, src_op) {
+            (Reg(dst), Reg(src)) => {
+                if dst.size() == Size::B8 {
+                    self.rr_arith((arith as u8) * 8, dst, src)
                 } else {
-                    self.rr_arith(1, dst_reg, src_reg)
+                    self.rr_arith((arith as u8) * 8 + 1, dst, src)
                 }
             },
             _ => {
                 Err(Error::NotImplemented)
             }
         }
+    }
+
+    pub fn add<Dst, Src>(&mut self, dst: Dst, src: Src) -> Result<()>
+        where Dst: Into<Operand>, Src: Into<Operand> {
+        self.gen_arith(Arith::ADD, dst.into(), src.into())
+    }
+
+    pub fn or<Dst, Src>(&mut self, dst: Dst, src: Src) -> Result<()>
+        where Dst: Into<Operand>, Src: Into<Operand> {
+        self.gen_arith(Arith::OR, dst.into(), src.into())
+    }
+
+    pub fn adc<Dst, Src>(&mut self, dst: Dst, src: Src) -> Result<()>
+        where Dst: Into<Operand>, Src: Into<Operand> {
+        self.gen_arith(Arith::ADC, dst.into(), src.into())
+    }
+
+    pub fn sbb<Dst, Src>(&mut self, dst: Dst, src: Src) -> Result<()>
+        where Dst: Into<Operand>, Src: Into<Operand> {
+        self.gen_arith(Arith::SBB, dst.into(), src.into())
+    }
+
+    pub fn and<Dst, Src>(&mut self, dst: Dst, src: Src) -> Result<()>
+        where Dst: Into<Operand>, Src: Into<Operand> {
+        self.gen_arith(Arith::AND, dst.into(), src.into())
+    }
+
+    pub fn sub<Dst, Src>(&mut self, dst: Dst, src: Src) -> Result<()>
+        where Dst: Into<Operand>, Src: Into<Operand> {
+        self.gen_arith(Arith::SUB, dst.into(), src.into())
+    }
+
+    pub fn xor<Dst, Src>(&mut self, dst: Dst, src: Src) -> Result<()>
+        where Dst: Into<Operand>, Src: Into<Operand> {
+        self.gen_arith(Arith::XOR, dst.into(), src.into())
+    }
+
+    pub fn cmp<Dst, Src>(&mut self, dst: Dst, src: Src) -> Result<()>
+        where Dst: Into<Operand>, Src: Into<Operand> {
+        self.gen_arith(Arith::CMP, dst.into(), src.into())
     }
 }

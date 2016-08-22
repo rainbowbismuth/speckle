@@ -41,11 +41,14 @@ sub compile(Str:D $asm) {
     sprintf "[%s]", (0..$str.chars/2-1).map({"0x{$str.substr($_ * 2, 2)}"}).join(", ")
 }
 
-my @ops = <add>;
-my @regs = <AL AX EAX RAX AH SIL R8B>;
+my @ops = <add or adc sbb and sub xor cmp>;
+my @regs = <AL CL DL BL AH CH DH BH SPL BPL SIL DIL R8B R9B R10B R11B R12B R13B R14B R15B
+            AX CX DX BX SP BP SI DI R8W R9W R10W R11W R12W R13W R14W R15W
+            EAX ECX EDX EBX ESP EBP ESI EDI R8D R9D R10D R11D R12D R13D R14D R15D
+            RAX RCX RDX RBX RSP RBP RSI RDI R8 R9 R10 R11 R12 R13 R14 R15>;
 my %seen;
 
-for 0..100 {
+for 0..1000 {
     my ($op, $r1, $r2) = (@ops, @regs, @regs)>>.roll;
     my $asm = "$op $r1, $r2";
 
