@@ -75,216 +75,216 @@ pub enum Register {
   ///
   /// Any instruction using this register is encoded with a REX prefix, and so cannot be used with the
   /// `AH`, `CH`, `DH` or `BH` registers.
-	 R8B = 0b0000011000,
+	 R8B = 0b0000111000,
   /// A 8-bit register. The low byte of the 16-bit register, `R9W`.
   ///
   /// Available only in 64-bit mode.
   ///
   /// Any instruction using this register is encoded with a REX prefix, and so cannot be used with the
   /// `AH`, `CH`, `DH` or `BH` registers.
-	 R9B = 0b0000011001,
+	 R9B = 0b0000111001,
   /// A 8-bit register. The low byte of the 16-bit register, `R10W`.
   ///
   /// Available only in 64-bit mode.
   ///
   /// Any instruction using this register is encoded with a REX prefix, and so cannot be used with the
   /// `AH`, `CH`, `DH` or `BH` registers.
-	R10B = 0b0000011010,
+	R10B = 0b0000111010,
   /// A 8-bit register. The low byte of the 16-bit register, `R11W`.
   ///
   /// Available only in 64-bit mode.
   ///
   /// Any instruction using this register is encoded with a REX prefix, and so cannot be used with the
   /// `AH`, `CH`, `DH` or `BH` registers.
-	R11B = 0b0000011011,
+	R11B = 0b0000111011,
   /// A 8-bit register. The low byte of the 16-bit register, `R12W`.
   ///
   /// Available only in 64-bit mode.
   ///
   /// Any instruction using this register is encoded with a REX prefix, and so cannot be used with the
   /// `AH`, `CH`, `DH` or `BH` registers.
-	R12B = 0b0000011100,
+	R12B = 0b0000111100,
   /// A 8-bit register. The low byte of the 16-bit register, `R13W`.
   ///
   /// Available only in 64-bit mode.
   ///
   /// Any instruction using this register is encoded with a REX prefix, and so cannot be used with the
   /// `AH`, `CH`, `DH` or `BH` registers.
-	R13B = 0b0000011101,
+	R13B = 0b0000111101,
   /// A 8-bit register. The low byte of the 16-bit register, `R14W`.
   ///
   /// Available only in 64-bit mode.
   ///
   /// Any instruction using this register is encoded with a REX prefix, and so cannot be used with the
   /// `AH`, `CH`, `DH` or `BH` registers.
-	R14B = 0b0000011110,
+	R14B = 0b0000111110,
   /// A 8-bit register. The low byte of the 16-bit register, `R15W`.
   ///
   /// Available only in 64-bit mode.
   ///
   /// Any instruction using this register is encoded with a REX prefix, and so cannot be used with the
   /// `AH`, `CH`, `DH` or `BH` registers.
-	R15B = 0b0000011111,
+	R15B = 0b0000111111,
   /// A 16-bit register. The low word of the 32-bit register, `EAX`.
-	  AX = 0b0000100000,
+	  AX = 0b0001000000,
   /// A 16-bit register. The low word of the 32-bit register, `ECX`.
-	  CX = 0b0000100001,
+	  CX = 0b0001000001,
   /// A 16-bit register. The low word of the 32-bit register, `EDX`.
-	  DX = 0b0000100010,
+	  DX = 0b0001000010,
   /// A 16-bit register. The low word of the 32-bit register, `EBX`.
-	  BX = 0b0000100011,
+	  BX = 0b0001000011,
   /// A 16-bit register. The low word of the 32-bit register, `ESP`.
-	  SP = 0b0000100100,
+	  SP = 0b0001000100,
   /// A 16-bit register. The low word of the 32-bit register, `EBP`.
-	  BP = 0b0000100101,
+	  BP = 0b0001000101,
   /// A 16-bit register. The low word of the 32-bit register, `ESI`.
-	  SI = 0b0000100110,
+	  SI = 0b0001000110,
   /// A 16-bit register. The low word of the 32-bit register, `EDI`.
-	  DI = 0b0000100111,
+	  DI = 0b0001000111,
   /// A 16-bit register. The low word of the 32-bit register, `R8D`.
   ///
   /// Available only in 64-bit mode.
-	 R8W = 0b0000111000,
+	 R8W = 0b0001111000,
   /// A 16-bit register. The low word of the 32-bit register, `R9D`.
   ///
   /// Available only in 64-bit mode.
-	 R9W = 0b0000111001,
+	 R9W = 0b0001111001,
   /// A 16-bit register. The low word of the 32-bit register, `R10D`.
   ///
   /// Available only in 64-bit mode.
-	R10W = 0b0000111010,
+	R10W = 0b0001111010,
   /// A 16-bit register. The low word of the 32-bit register, `R11D`.
   ///
   /// Available only in 64-bit mode.
-	R11W = 0b0000111011,
+	R11W = 0b0001111011,
   /// A 16-bit register. The low word of the 32-bit register, `R12D`.
   ///
   /// Available only in 64-bit mode.
-	R12W = 0b0000111100,
+	R12W = 0b0001111100,
   /// A 16-bit register. The low word of the 32-bit register, `R13D`.
   ///
   /// Available only in 64-bit mode.
-	R13W = 0b0000111101,
+	R13W = 0b0001111101,
   /// A 16-bit register. The low word of the 32-bit register, `R14D`.
   ///
   /// Available only in 64-bit mode.
-	R14W = 0b0000111110,
+	R14W = 0b0001111110,
   /// A 16-bit register. The low word of the 32-bit register, `R15D`.
   ///
   /// Available only in 64-bit mode.
-	R15W = 0b0000111111,
+	R15W = 0b0001111111,
   /// A 32-bit register. The low double word of the 64-bit register, `RAX`.
-	 EAX = 0b0001000000,
+	 EAX = 0b0010000000,
   /// A 32-bit register. The low double word of the 64-bit register, `RCX`.
-	 ECX = 0b0001000001,
+	 ECX = 0b0010000001,
   /// A 32-bit register. The low double word of the 64-bit register, `RDX`.
-	 EDX = 0b0001000010,
+	 EDX = 0b0010000010,
   /// A 32-bit register. The low double word of the 64-bit register, `RBX`.
-	 EBX = 0b0001000011,
+	 EBX = 0b0010000011,
   /// A 32-bit register. The low double word of the 64-bit register, `RSP`.
-	 ESP = 0b0001000100,
+	 ESP = 0b0010000100,
   /// A 32-bit register. The low double word of the 64-bit register, `RBP`.
-	 EBP = 0b0001000101,
+	 EBP = 0b0010000101,
   /// A 32-bit register. The low double word of the 64-bit register, `RSI`.
-	 ESI = 0b0001000110,
+	 ESI = 0b0010000110,
   /// A 32-bit register. The low double word of the 64-bit register, `RDI`.
-	 EDI = 0b0001000111,
+	 EDI = 0b0010000111,
   /// A 32-bit register. The low double word of the 64-bit register, `R8`.
   ///
   /// Available only in 64-bit mode.
-	 R8D = 0b0001011000,
+	 R8D = 0b0010111000,
   /// A 32-bit register. The low double word of the 64-bit register, `R9`.
   ///
   /// Available only in 64-bit mode.
-	 R9D = 0b0001011001,
+	 R9D = 0b0010111001,
   /// A 32-bit register. The low double word of the 64-bit register, `R10`.
   ///
   /// Available only in 64-bit mode.
-	R10D = 0b0001011010,
+	R10D = 0b0010111010,
   /// A 32-bit register. The low double word of the 64-bit register, `R11`.
   ///
   /// Available only in 64-bit mode.
-	R11D = 0b0001011011,
+	R11D = 0b0010111011,
   /// A 32-bit register. The low double word of the 64-bit register, `R12`.
   ///
   /// Available only in 64-bit mode.
-	R12D = 0b0001011100,
+	R12D = 0b0010111100,
   /// A 32-bit register. The low double word of the 64-bit register, `R13`.
   ///
   /// Available only in 64-bit mode.
-	R13D = 0b0001011101,
+	R13D = 0b0010111101,
   /// A 32-bit register. The low double word of the 64-bit register, `R14`.
   ///
   /// Available only in 64-bit mode.
-	R14D = 0b0001011110,
+	R14D = 0b0010111110,
   /// A 32-bit register. The low double word of the 64-bit register, `R15`.
   ///
   /// Available only in 64-bit mode.
-	R15D = 0b0001011111,
+	R15D = 0b0010111111,
   /// A 64-bit register.
   ///
   /// Available only in 64-bit mode.
-	 RAX = 0b0001110000,
+	 RAX = 0b0011010000,
   /// A 64-bit register.
   ///
   /// Available only in 64-bit mode.
-	 RCX = 0b0001110001,
+	 RCX = 0b0011010001,
   /// A 64-bit register.
   ///
   /// Available only in 64-bit mode.
-	 RDX = 0b0001110010,
+	 RDX = 0b0011010010,
   /// A 64-bit register.
   ///
   /// Available only in 64-bit mode.
-	 RBX = 0b0001110011,
+	 RBX = 0b0011010011,
   /// A 64-bit register.
   ///
   /// Available only in 64-bit mode.
-	 RSP = 0b0001110100,
+	 RSP = 0b0011010100,
   /// A 64-bit register.
   ///
   /// Available only in 64-bit mode.
-	 RBP = 0b0001110101,
+	 RBP = 0b0011010101,
   /// A 64-bit register.
   ///
   /// Available only in 64-bit mode.
-	 RSI = 0b0001110110,
+	 RSI = 0b0011010110,
   /// A 64-bit register.
   ///
   /// Available only in 64-bit mode.
-	 RDI = 0b0001110111,
+	 RDI = 0b0011010111,
   /// A 64-bit register.
   ///
   /// Available only in 64-bit mode.
-	  R8 = 0b0001111000,
+	  R8 = 0b0011111000,
   /// A 64-bit register.
   ///
   /// Available only in 64-bit mode.
-	  R9 = 0b0001111001,
+	  R9 = 0b0011111001,
   /// A 64-bit register.
   ///
   /// Available only in 64-bit mode.
-	 R10 = 0b0001111010,
+	 R10 = 0b0011111010,
   /// A 64-bit register.
   ///
   /// Available only in 64-bit mode.
-	 R11 = 0b0001111011,
+	 R11 = 0b0011111011,
   /// A 64-bit register.
   ///
   /// Available only in 64-bit mode.
-	 R12 = 0b0001111100,
+	 R12 = 0b0011111100,
   /// A 64-bit register.
   ///
   /// Available only in 64-bit mode.
-	 R13 = 0b0001111101,
+	 R13 = 0b0011111101,
   /// A 64-bit register.
   ///
   /// Available only in 64-bit mode.
-	 R14 = 0b0001111110,
+	 R14 = 0b0011111110,
   /// A 64-bit register.
   ///
   /// Available only in 64-bit mode.
-	 R15 = 0b0001111111,
+	 R15 = 0b0011111111,
 }
 
 /// The size of a general purpose register.
@@ -335,6 +335,17 @@ impl Register {
         ((self as u16) >> 4) & 1 != 0
     }
 
+    /// Does this register require a REX extension to encode?
+    ///
+    /// ```
+    /// use speckle::x64::Register;
+    /// assert_eq!(Register::SIL.ext(), false);
+    /// assert_eq!(Register::R8B.ext(), true);
+    /// ```
+    pub fn ext(self) -> bool {
+        ((self as u16) >> 5) & 1 != 0
+    }
+
     /// Returns how big the register is.
     ///
     /// ```
@@ -343,7 +354,7 @@ impl Register {
     /// assert_eq!(Register::R8W.size(), Size::W);
     /// ```
     pub fn size(self) -> Size {
-        match (((self as u16) >> 5) & 0b11) as u8 {
+        match (((self as u16) >> 6) & 0b11) as u8 {
             0 => Size::B,
             1 => Size::W,
             2 => Size::D,
@@ -352,5 +363,4 @@ impl Register {
         }
     }
 }
-
 

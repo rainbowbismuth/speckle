@@ -29,6 +29,7 @@ sub reg-info(Str:D $name, Int:D $bits, Int:D $code, Bool:D :$ext=False,
     %registers{$name}<code> = $ext ?? $code + 8 !! $code;
     %registers{$name}<never-rex> = $never-rex;
     %registers{$name}<needs-rex> = $bits == 64 || $needs-rex || $ext;
+    %registers{$name}<ext> = $ext;
     %registers{$name}<comment> = $comment;
 }
 
@@ -133,7 +134,8 @@ for %registers.keys.sort(&reg-compare) {
     my $repr = %registers{$_}<code> + 
         (%registers{$_}<never-rex> +< 3) +
         (%registers{$_}<needs-rex> +< 4) +
-        ($size +< 5);
+        (%registers{$_}<ext> +< 5) +
+        ($size +< 6);
 
     say %registers{$_}<comment>.chomp.indent(2);
     printf "\t%4s = 0b%010b,\n", $_, $repr;
@@ -190,6 +192,17 @@ impl Register {
         ((self as u16) >> 4) & 1 != 0
     }
 
+    /// Does this register require a REX extension to encode?
+    ///
+    /// ```
+    /// use speckle::x64::Register;
+    /// assert_eq!(Register::SIL.ext(), false);
+    /// assert_eq!(Register::R8B.ext(), true);
+    /// ```
+    pub fn ext(self) -> bool {
+        ((self as u16) >> 5) & 1 != 0
+    }
+
     /// Returns how big the register is.
     ///
     /// ```
@@ -198,7 +211,7 @@ impl Register {
     /// assert_eq!(Register::R8W.size(), Size::W);
     /// ```
     pub fn size(self) -> Size {
-        match (((self as u16) >> 5) & 0b11) as u8 {
+        match (((self as u16) >> 6) & 0b11) as u8 {
             0 => Size::B,
             1 => Size::W,
             2 => Size::D,
